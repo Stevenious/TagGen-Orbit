@@ -176,6 +176,31 @@ get('collection-print').onclick().then(async () => {
   ctx.testVerify.verifyPanel.replaceChildren();
   await ctx.testVerify.verifyRepo.onclick();
   assert(ctx.testVerify.verifyPanel.children.some(x => x.textContent.includes('Speicher stimmt nicht überein')));
+
+  // Reader messages guide the user from inventory to read, then to opening the dump.
+  const inventoryCode = html.match(/BLE\.inventory=function\(\)\{[^\n]+\};/);
+  const readCode = html.match(/BLE\.readTag=function\(\)\{[^\n]+\};/);
+  assert(inventoryCode && readCode);
+  ctx.BLE.guide = text => { ctx.nextStep = text; };
+  ctx.BLE.report = text => { ctx.readerReport = text; };
+  ctx.BLE.run = async fn => fn();
+  ctx.BLE.field = async fn => fn();
+  ctx.BLE.uids = async () => [[0x55, 0x44, 0x33, 0x22, 0x11, 0x03, 0x04, 0xe0]];
+  ctx.BLE.uidText = () => parsed.uid;
+  ctx.BLE.inspect = async () => ({ uidText: parsed.uid, blocks: 2, size: 4 });
+  ctx.BLE.flipper = () => raw;
+  vm.runInContext(inventoryCode[0] + '\n' + readCode[0], ctx);
+  await ctx.BLE.inventory();
+  assert(ctx.nextStep.includes('Tag-Speicher lesen'));
+  assert(ctx.nextStep.includes(parsed.uid));
+  ctx.BLE.uids = async () => [];
+  await ctx.BLE.inventory();
+  assert(ctx.nextStep.includes('Kein Tag erkannt'));
+  ctx.BLE.uids = async () => [[1], [2]];
+  await ctx.BLE.inventory();
+  assert(ctx.nextStep.includes('Mehrere Tags erkannt'));
+  await ctx.BLE.readTag();
+  assert(ctx.nextStep.includes('Gelesenen Tag öffnen'));
   console.log('Flow Integrity: migration, identity, edit, round-trip and front-only transfer passed');
   console.log('NFC Read & Verify: known, changed, unknown, ambiguous and write guard passed');
 }).catch(error => { console.error(error); process.exitCode = 1; });
