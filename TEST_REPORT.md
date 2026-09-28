@@ -98,3 +98,9 @@ Safari-Screenshot: vier Seiten mit leerer Seite 2 und 4 bei Duplex. Print-CSS re
 Unbekannte UIDs lassen sich auf Knopfdruck mit dem von L480 aus `nortakales/flipper-zero-tonies` erzeugten öffentlichen Index vergleichen. Nur ein einzelner UID-Treffer mit byteweise identischem Repo-Dump ergibt einen Cover-Vorschlag; die Bibliotheksauswahl erfolgt weiterhin bewusst. Der Index wird im Browser geladen und nicht als private Sammlung gespeichert. Kein kompletter Community-Dump-Katalog wird in Orbit ausgeliefert.
 
 Die Kennung `E0 04 03` folgt dem NXP-Datenblatt für ICODE SLIX-L. Sie beweist weder einen Originalchip noch den Audioinhalt; eine gleiche UID mit identischem gespeichertem Dump bestätigt nur die gelesenen Speicherbytes. Reale PN5180/BLE-Verbindung, Trennen/Neuverbinden, wechselnde Lesestärke und iPhone/Bluefy bleiben für die Geräteabnahme offen. Der Workflow sendet keine Schreibkommandos.
+
+## RC8 · Nutzerabnahme und BLE-Wegführung
+
+Am 28. September 2026 hat der Nutzer im BLE-Browser den NFC-Archiver verbunden, eine UID erkannt, den Tag gelesen und über den Community-Dump das passende Cover gefunden. Diese Abnahme deckt Erkennen → Lesen → Community-Vorschlag → Cover-Zuordnung am verwendeten Gerät ab; sie belegt weder sämtliche Tagtypen noch einen physischen Schreibtest.
+
+Die Oberfläche zeigt jetzt nach der Inventur ausdrücklich „Tag-Speicher lesen“ und nach erfolgreichem Auslesen „Gelesenen Tag öffnen“ als nächsten Schritt. Verbindungsstatus, mehrere oder keine Tags sowie Reader-Fehler erhalten passende Hinweise. Der vorhandene Node-Test führt die echten Inventur- und Lesehandler mit Reader-Doubles aus und prüft die Hinweise. Weitere Gerätefälle (Disconnect/Reconnect, abweichender Speicher, kein Community-Treffer) bleiben zur Abnahme offen.
