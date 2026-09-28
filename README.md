@@ -1,4 +1,4 @@
-# TagGen Orbit 5 · Release Candidate 7
+# TagGen Orbit 5 · Release Candidate 8
 
 **Deine Geschichten. Dein System.**
 
@@ -184,7 +184,7 @@ Duplex erzeugt bei aktivierten Rückseiten zwei A4-Seiten: auf Seite 2 wandern d
 
 ## RC3 · Rückseiten ohne Studio-Schritt
 
-Sammlungsdruck aktiviert die Rückseite für **jedes** bestätigte Cover. Auch ein reiner Coverstapel ohne NFC-Dateien erzeugt bei Ausgabe „Automatisch“ zwei A4-Seiten. Für acht ausgewählte Cover gibt es acht QR-Rückseiten an den passenden Positionen. Eine UID wird nur ergänzt, wenn sie aus einer zugeordneten NFC-Datei stammt. Im Druckstudio lässt sich „Nur Vorderseiten“ weiterhin ausdrücklich auswählen; ein erneuter Sammlungsdruck stellt „Automatisch“ her.
+Sammlungsdruck aktiviert die Rückseite für **jedes** bestätigte Cover. Auch ein reiner Coverstapel ohne NFC-Dateien erzeugt bei Ausgabe „Automatisch“ zwei A4-Seiten. Für acht ausgewählte Cover gibt es acht QR-Rückseiten an den passenden Positionen. Eine UID wird nur ergänzt, wenn sie aus einer zugeordneten NFC-Datei stammt. Eine ausdrücklich gewählte Ausgabe „Nur Vorderseiten“ bleibt auch nach erneuter Übernahme aus der Sammlung erhalten.
 
 Die bestehende private Projektdatei und die Sammlung bleiben lesbar. Vor einer physischen Etikettenausgabe sind QR-Scan und Wendekante auf Normalpapier zu prüfen.
 
@@ -206,7 +206,7 @@ Der Druckbereich endet jetzt hinter dem letzten belegten Motiv und der Seitenwec
 
 Die Bibliothek zeigt während des ersten Ladevorgangs „Kataloge werden geladen …“ statt „0 Treffer“. Nach Abschluss unterscheidet sie Treffer und Ladefehler. JSON-Importe bleiben beim nachfolgenden Online-Abgleich erhalten. Der Filter „Verlauf/Eigene“ wird nicht durch einen zweiten Eventhandler überschrieben. Wiederholtes Tippen auf „Auf den Druckbogen“ während des Coverladens erzeugt nur einen Slot.
 
-Unter „System & Verbindungen → Flow prüfen“ führt Orbit fünf lesende Laufzeitprüfungen aus: Katalog, Suchdatensatz, Cover-Rendering, belegter Druckslot und gültige Druckdaten. Ohne einen gewählten Tonie oder belegten Druckbogen sind weniger als 5/5 korrekt. Das ersetzt keinen physischen Drucktest.
+Unter „System & Verbindungen → Flow prüfen“ führt Orbit sechs lesende Laufzeitprüfungen aus: Katalog, Suchtreffer, Cover, Sammlungs-Roundtrip, verknüpfter Druckslot und Druckdaten. Ohne den vollständigen Ablauf sind weniger als 6/6 korrekt. Das ersetzt keinen physischen Drucktest.
 
 Beim BLE-Lesezugriff bleibt der Reader ausschließlich lesend. „Gelesenen Tag öffnen“ zeigt bei einer eindeutig bereits in der Sammlung gespeicherten UID das zugehörige Cover im Studio. Bei unbekannter UID bleibt die Werkstatt offen; das Motiv muss bewusst zugeordnet werden. Die bestehende Sammlung und ihre gespeicherten Dumps werden durch Lesen nicht geändert. UID allein beweist keinen Audioinhalt.
 
@@ -216,3 +216,9 @@ Beim BLE-Lesezugriff bleibt der Reader ausschließlich lesend. „Gelesenen Tag 
 Jeder Sammlungseintrag speichert nun drei getrennte Bereiche: `content` (Titel, Serie, Cover/Editorzustand und Inhalts-Audio-ID), `tag` (UID und private originale .nfc-Datei) und `physical` (43-mm-Kapsel, Custom Tag, Kreativ-Tonie, Original-Tonie oder Custom-Figur). Der Träger wird direkt am Sammlungseintrag gewählt. Eine neue NFC-Datei ändert Cover und Titel nicht; ein neues Cover lässt Tag-UID und Datei unverändert. Die private Sammlung nutzt Formatversion 3; ältere Versionen 1 und 2 werden beim Laden migriert. Die .taggen-Projektdatei enthält und lädt diese Sammlung ebenfalls. Exportiere vor einem Gerätewechsel eine private Sicherung.
 
 In der Werkstatt findest du „TeddyCloud nutzen · Dateien & Zuordnung“ mit der Reihenfolge Orbit-Cover/PNG, .nfc-Dokumentation und Zuordnung in TeddyCloud. Orbit ist eine statische GitHub-Pages-App, besitzt keine TeddyCloud-Authentifizierung und synchronisiert keine privaten NFC-Dumps oder Tag-UIDs mit einem Server. Orbit-Backups steuern die Wiedergabe der Toniebox nicht.
+
+## RC8 · NFC Read & Verify
+
+Beim Öffnen eines gelesenen Tags zeigt die Werkstatt UID, Speichergröße und die erkennbare ISO15693-/SLIX-L-UID-Kennung. Ein eindeutiger Treffer in der eigenen Sammlung kann das bekannte Cover öffnen. Weichen die gelesenen Speicherbytes von der gespeicherten NFC-Datei ab, ist dieselbe UID mehrfach gespeichert oder ist die UID unbekannt, erfolgt keine automatische Cover-Übernahme. Ein generierter Dateiname `Tag-<UID>.nfc` gilt nicht als Hörspieltitel.
+
+Bei unbekannter UID kann man **„Community-Dumps prüfen“** wählen. Orbit lädt dazu erst auf Knopfdruck den öffentlichen [Index von L480](https://github.com/L480/tonies), der aus den [Flipper-Zero-Tonie-Dumps von nortakales](https://github.com/nortakales/flipper-zero-tonies) erzeugt wird. Die UID wird im Browser verglichen. Ein einzelner Index-Treffer wird anschließend mit dem zugehörigen öffentlichen Dump byteweise abgeglichen. Selbst bei Übereinstimmung erscheint nur ein Cover-Vorschlag, den man in der Bibliothek bewusst auswählt. Kein Treffer und abweichende Bytes bleiben ungeklärt. Die UID-Kennung und ein Dump-Abgleich beweisen weder einen Originalchip noch den tatsächlichen Audioinhalt. Reader-Schreibbefehle sind weiterhin gesperrt.
