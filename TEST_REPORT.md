@@ -90,3 +90,11 @@ Safari-Screenshot: vier Seiten mit leerer Seite 2 und 4 bei Duplex. Print-CSS re
 ## RC7 · Sammlung und TeddyCloud-Hilfe
 
 `node flow-lock-test.cjs` prüft zusätzlich: Import einer alten Sammlung V2 mit Standardträger, V3-Export mit `content`/`tag`/`physical`, unabhängige Änderung der verschachtelten Inhalt/Tag-Felder, UI-Dateitausch per `NFC austauschen` bei unverändertem Cover/Titel, UI-Covertausch bei unveränderter Tag-UID, privaten `.taggen`-Projektexport mit Sammlung und Import-Wiederherstellung. Der Test verwendet simulierte Datei-Eingaben; echter TeddyCloud-Abgleich wird bewusst nicht behauptet. Ein echter Gerätewechsel mit großen Bildern und reale Safari-Abnahme stehen noch aus.
+
+## RC8 · NFC Read & Verify
+
+`node flow-integrity-test.cjs` prüft zusätzlich die SLIX-L-UID-Kennung, bekannte UID mit identischem Dump, geänderte Speicherbytes bei gleicher UID, unbekannte UID, doppelte UID, Community-Index-Treffer und den ausführbaren BLE-Opcode-Filter. Ein abweichender oder mehrfach zugeordneter Tag öffnet kein gespeichertes Cover automatisch. Der generierte BLE-Dateiname `Tag-<UID>.nfc` wird nicht als Tonie-Titel behandelt; bei Dateinamen werden nur eindeutige Exact-Treffer automatisch übernommen, Strong/Fuzzy benötigen die bewusste Auswahl.
+
+Unbekannte UIDs lassen sich auf Knopfdruck mit dem von L480 aus `nortakales/flipper-zero-tonies` erzeugten öffentlichen Index vergleichen. Nur ein einzelner UID-Treffer mit byteweise identischem Repo-Dump ergibt einen Cover-Vorschlag; die Bibliotheksauswahl erfolgt weiterhin bewusst. Der Index wird im Browser geladen und nicht als private Sammlung gespeichert. Kein kompletter Community-Dump-Katalog wird in Orbit ausgeliefert.
+
+Die Kennung `E0 04 03` folgt dem NXP-Datenblatt für ICODE SLIX-L. Sie beweist weder einen Originalchip noch den Audioinhalt; eine gleiche UID mit identischem gespeichertem Dump bestätigt nur die gelesenen Speicherbytes. Reale PN5180/BLE-Verbindung, Trennen/Neuverbinden, wechselnde Lesestärke und iPhone/Bluefy bleiben für die Geräteabnahme offen. Der Workflow sendet keine Schreibkommandos.
