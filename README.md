@@ -90,7 +90,7 @@ Daraus folgt für Orbit: **weniger wiederholte Eingaben, sichtbare Zuordnungen, 
 
 ## Brand
 
-TagGen Orbit behält das bekannte Orbit-T-Zeichen. Das SVG ist als `assets/orbit-logo.svg` beigefügt; das App-Logo ist direkt in der HTML eingebettet, sodass `index.html` alleine deploybar bleibt.
+TagGen Orbit behält das bekannte Orbit-T-Zeichen. Logo und Icons wurden nach Angabe des Projektbetreibers KI-gestützt im TagGen-Orbit-Sprint erstellt. Das SVG ist als `assets/orbit-logo.svg` beigefügt; das App-Logo ist direkt in der HTML eingebettet, sodass `index.html` alleine deploybar bleibt. Die Nutzung der veröffentlichten App erteilt keine allgemeine Erlaubnis, Orbit-Code oder Projektgrafiken weiterzugeben oder zu bearbeiten; Einzelheiten stehen in [CREDITS_AND_RIGHTS.md](CREDITS_AND_RIGHTS.md).
 
 - Rose `#DA2355`: Hauptaktion
 - Tinte `#172033`: Text
