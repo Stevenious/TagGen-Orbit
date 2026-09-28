@@ -1,5 +1,5 @@
 /* TagGen Orbit offline shell. Private projects, NFC dumps and remote covers are not cached. */
-const CACHE='taggen-orbit-shell-5-rc8-workflow';
+const CACHE='taggen-orbit-shell-5-rc8-credits';
 const PREFIX='taggen-orbit-shell-';
 const ROOT=new URL('./',self.registration.scope);
 const SHELL=['./','./index.html','./manifest.webmanifest','./assets/orbit-icon-192.png','./assets/orbit-icon-512.png'];

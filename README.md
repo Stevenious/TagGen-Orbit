@@ -55,6 +55,12 @@ Am Sammlungseintrag öffnet **NFC suchen** die bestehende Dump-Suche mit dem Tit
 
 **Private Sammlungen können Passwörter und Speicherinhalte enthalten.** Sie sind kein öffentliches Community-Paket. Es erfolgt kein Upload der Sammlung an einen Orbit-Server. Falls der Browser-Speicher voll oder gesperrt ist, weist Orbit auf die Dateisicherung hin. Online-Bildverweise bleiben netzabhängig, wenn die Quelle keine Einbettung erlaubt.
 
+## Danke, Quellen und Rechte
+
+Danke an die Maintainer und Beitragenden von [tonies-json](https://github.com/toniebox-reverse-engineering/tonies-json) (Katalog), [flipper-zero-tonies](https://github.com/nortakales/flipper-zero-tonies) (optionale Dump-Suche), [L480/tonies](https://github.com/L480/tonies) (optionaler UID-Index), [NFC-Archiver](https://github.com/RFIDfriend/NFC-Archiver) (BLE-Reader-Dokumentation), [TeddyCloud](https://github.com/toniebox-reverse-engineering/teddycloud) (manuelle Custom-Tag-Zuordnung), [SLI-Writer](https://github.com/Julienbxl/SLI-Writer) (Referenz für späteres Schreiben) und [Kazuhiko Arase](https://github.com/kazuhikoarase/qrcode-generator) (eingebetteter QR-Code-Generator unter MIT). Quellen, jeweilige Verwendung, Lizenzprüfung und offene Punkte stehen in [CREDITS_AND_RIGHTS.md](CREDITS_AND_RIGHTS.md). Die Nennung bedeutet keine Unterstützung von Orbit durch diese Projekte.
+
+Sammlung und NFC-Dateien werden lokal verarbeitet. Online-Kataloge und Cover, optionale GitHub-Abfragen und das Hosting auf GitHub Pages erzeugen Verbindungen zu den jeweiligen Anbietern; der BLE-Reader wird erst nach Auswahl im Browser angesprochen. Die private Sammlung wird nicht an einen eigenen Orbit-Server hochgeladen. Nutzerinnen und Nutzer benötigen die passenden Rechte für eigene Bilder, Audioinhalte, Tags und deren Weitergabe. Tonie und Toniebox sind Namen ihrer jeweiligen Rechteinhaber; Orbit ist unabhängig. Eine Quellenangabe erteilt keine Nutzungsrechte an fremden Covern oder Dumps. Die rechtlich verbindlichen Angaben zum konkreten Betrieb und die Herkunft der Projektgrafiken müssen die Verantwortlichen noch prüfen.
+
 ## Formate
 
 | Format | Raster / Plätze |
@@ -84,7 +90,7 @@ Daraus folgt für Orbit: **weniger wiederholte Eingaben, sichtbare Zuordnungen, 
 
 ## Brand
 
-TagGen Orbit behält das bekannte Orbit-T-Zeichen. Das SVG ist als `assets/orbit-logo.svg` beigefügt; das App-Logo ist direkt in der HTML eingebettet, sodass `index.html` alleine deploybar bleibt.
+TagGen Orbit behält das bekannte Orbit-T-Zeichen. Logo und Icons wurden nach Angabe des Projektbetreibers KI-gestützt im TagGen-Orbit-Sprint erstellt. Das SVG ist als `assets/orbit-logo.svg` beigefügt; das App-Logo ist direkt in der HTML eingebettet, sodass `index.html` alleine deploybar bleibt. Die Nutzung der veröffentlichten App erteilt keine allgemeine Erlaubnis, Orbit-Code oder Projektgrafiken weiterzugeben oder zu bearbeiten; Einzelheiten stehen in [CREDITS_AND_RIGHTS.md](CREDITS_AND_RIGHTS.md).
 
 - Rose `#DA2355`: Hauptaktion
 - Tinte `#172033`: Text
