@@ -1,4 +1,11 @@
-# Changelog
+# TagGen Universe – Changelog
+
+## Universe 6.0 Preview · robuster Start und Offline-Hülle
+- Startseite bleibt auch ohne Universe-JavaScript sichtbar; direkter Zugang zum Cover-Studio.
+- Shell-Cache `taggen-universe-shell-6-0-0` enthält beide Universe-Dateien.
+- Präfix `taggen-` entfernt auch die alten Orbit-Shell-Caches.
+- README beschreibt den aktuellen Universe-Aufbau und seine Grenzen.
+- Regression für fehlendes Universe-JavaScript und Offline-Cache ergänzt.
 
 ## Universe 6.0 Preview · Systemeinstellung & verständliche Bedienung
 - Automatischer Dark Mode für die Universe-Oberfläche nach Systemeinstellung.

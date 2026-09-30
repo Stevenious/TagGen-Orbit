@@ -25,6 +25,7 @@ async function run(engine,name,width,theme="light"){
  await page.goto('http://127.0.0.1:'+server.address().port+'/',{waitUntil:'networkidle'});
  await page.waitForFunction(()=>window.Universe&&window.orbitCollection&&state.items.length>=8);
  assert(await page.locator('#view-home').isVisible(),name+': collection-first home');
+ assert(!await page.locator('#universe-start-fallback').isVisible(),name+': fallback hidden after startup');
  const appearance=await page.evaluate(()=>({scheme:getComputedStyle(document.documentElement).colorScheme,body:getComputedStyle(document.body).backgroundColor,ink:getComputedStyle(document.getElementById('universe-home-title')).color}));
  assert.equal(appearance.scheme,theme);
  assert.equal(appearance.body,theme==='dark'?'rgb(15, 20, 29)':'rgb(247, 248, 251)');
@@ -119,7 +120,25 @@ async function run(engine,name,width,theme="light"){
  await context.close();await browser.close();
  } catch(error) { fs.mkdirSync(path.join(dir,'test-output'),{recursive:true});await page.screenshot({path:path.join(dir,'test-output',name+'-failure.png'),fullPage:true}).catch(()=>{});await browser.close();throw error; }
 }
+async function fallback(){
+ const browser=await chromium.launch({headless:true});
+ try{
+  for(const blockCSS of [false,true]){
+   const page=await browser.newPage();
+   await page.route('**/universe.js',r=>r.abort());
+   if(blockCSS)await page.route('**/universe.css',r=>r.abort());
+   await page.route('https://raw.githubusercontent.com/**',r=>r.fulfill({contentType:'application/json',body:JSON.stringify(catalog)}));
+   await page.goto('http://127.0.0.1:'+server.address().port+'/',{waitUntil:'networkidle'});
+   assert(await page.locator('#view-home').isVisible(),'Fallback home visible');
+   assert(await page.locator('#universe-start-fallback').isVisible(),'Fallback action visible');
+   await page.locator('#universe-start-fallback button').click();
+   assert(await page.locator('#view-studio').isVisible(),'Core studio usable without Universe');
+   await page.close();
+  }
+  console.log('Missing Universe JS/CSS: visible home and working core studio passed');
+ }finally{await browser.close();}
+}
 (async()=>{
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
- try{await run(chromium,'desktop-chromium',1280);await run(chromium,'mobile-chromium',375);await run(webkit,'mobile-webkit',375);await run(chromium,'desktop-chromium-dark',1280,'dark');await run(webkit,'mobile-webkit-dark',375,'dark');}finally{server.close();}
+ try{await fallback();await run(chromium,'desktop-chromium',1280);await run(chromium,'mobile-chromium',375);await run(webkit,'mobile-webkit',375);await run(chromium,'desktop-chromium-dark',1280,'dark');await run(webkit,'mobile-webkit-dark',375,'dark');}finally{server.close();}
 })().catch(error=>{console.error(error);server.close();process.exit(1);});

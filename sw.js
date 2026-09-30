@@ -1,6 +1,6 @@
 /* TagGen Universe offline shell. Private projects, NFC dumps and remote covers are not cached. */
-const CACHE='taggen-orbit-shell-6-universe-system-theme';
-const PREFIX='taggen-orbit-shell-';
+const CACHE='taggen-universe-shell-6-0-0';
+const PREFIX='taggen-';
 const ROOT=new URL('./',self.registration.scope);
 const SHELL=['./','./index.html','./universe.css','./universe.js','./manifest.webmanifest','./assets/orbit-icon-192.png','./assets/orbit-icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);await cache.addAll(SHELL.map(p=>new URL(p,ROOT).href));})()));
