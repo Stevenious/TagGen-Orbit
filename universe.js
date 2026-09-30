@@ -129,7 +129,7 @@ const filters=node('div',undefined,'universe-filter');filters.id='universe-colle
 for(const world of ['',...worlds]){const b=button(world||'Alle',()=>{view.world=world;refreshCollection();});b.dataset.world=world;b.setAttribute('aria-pressed',String(!world));filters.append(b);}
 const collectionStatus=node('p',undefined,'status');collectionStatus.id='universe-collection-status';collectionStatus.setAttribute('role','status');
 const collectionCards=node('div',undefined,'universe-cards');collectionCards.id='universe-collection-cards';
-heading.after(filters,collectionStatus,collectionCards);
+heading.after(filters,collectionStatus,el('collection-storage'),collectionCards);
 const batchActions=node('div',undefined,'universe-batch-actions');
 batchActions.append(button('Stapel zum Druckbogen →',()=>el('collection-print').click(),'primary'),button('Sammlung sichern',()=>el('collection-export').click()));
 collectionCards.after(batchActions);
@@ -148,8 +148,8 @@ el('universe-start-batch').onclick=()=>{el('universe-batch').hidden=false;el('un
 const readData=file=>new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('Bild konnte nicht gelesen werden.'));reader.readAsDataURL(file);});
 async function imageData(file){
  if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>10000000)throw Error('PNG/JPG/WebP bis 10 MB verwenden.');
- const raw=await readData(file),image=await getImage(raw),limit=1000,scale=Math.min(1,limit/Math.max(image.naturalWidth,image.naturalHeight)),c=document.createElement('canvas');
- c.width=Math.max(1,Math.round(image.naturalWidth*scale));c.height=Math.max(1,Math.round(image.naturalHeight*scale));c.getContext('2d').drawImage(image,0,0,c.width,c.height);return c.toDataURL('image/png');
+ const raw=await readData(file),image=await getImage(raw),limit=600,scale=Math.min(1,limit/Math.max(image.naturalWidth,image.naturalHeight)),c=document.createElement('canvas');
+ c.width=Math.max(1,Math.round(image.naturalWidth*scale));c.height=Math.max(1,Math.round(image.naturalHeight*scale));c.getContext('2d').drawImage(image,0,0,c.width,c.height);return c.toDataURL('image/webp',0.9);
 }
 function fileTitle(name){return name.replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ').trim().slice(0,180)||'Mein Cover';}
 function suggest(title){

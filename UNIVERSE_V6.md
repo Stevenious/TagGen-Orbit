@@ -26,3 +26,5 @@ CI führt die bestehenden Tests aus und prüft neue Wege mit Chromium und WebKit
 6. Rückseite aus: eine Druckseite; Rückseite an: bisheriger Duplex-Ablauf.
 7. Mehr → Werkstatt: bisherige NFC-, BLE-, Export- und Diagnosetools erreichbar.
 8. Stapelimport: unsichere Dateinamen ändern weder UID noch vermeintliche Audioquelle.
+
+Bildstapel werden lokal auf maximal 600 px pro Kante und WebP komprimiert (etwa 380 dpi bei 40 mm). Der Browser-Speicherstatus steht sichtbar über den Sammlungskarten; bei vollem Speicher muss die Sammlung als Datei gesichert werden.

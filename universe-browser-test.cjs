@@ -20,6 +20,8 @@ async function run(engine,name,width){
  const context=await browser.newContext({viewport:{width,height:1000},acceptDownloads:true});
  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://raw.githubusercontent.com/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(catalog)}));
+ page.setDefaultTimeout(15000);
+ try {
  await page.goto('http://127.0.0.1:'+server.address().port+'/',{waitUntil:'networkidle'});
  await page.waitForFunction(()=>window.Universe&&window.orbitCollection&&state.items.length>=8);
  assert(await page.locator('#view-home').isVisible(),name+': collection-first home');
@@ -93,8 +95,9 @@ async function run(engine,name,width){
  assert.equal(errors.length,0,name+': browser errors '+errors.join('; '));
  console.log(name+': home, search, editor, passport, persistence, worlds, batch, front print and workshop passed');
  await context.close();await browser.close();
+ } catch(error) { fs.mkdirSync(path.join(dir,'test-output'),{recursive:true});await page.screenshot({path:path.join(dir,'test-output',name+'-failure.png'),fullPage:true}).catch(()=>{});await browser.close();throw error; }
 }
 (async()=>{
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
  try{await run(chromium,'desktop-chromium',1280);await run(chromium,'mobile-chromium',375);await run(webkit,'mobile-webkit',375);}finally{server.close();}
-})().catch(error=>{console.error(error);server.close();process.exitCode=1;});
+})().catch(error=>{console.error(error);server.close();process.exit(1);});
