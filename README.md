@@ -1,36 +1,34 @@
-# TagGen Orbit – Wiederherstellung mit Grafikideen
+# TagGen Universe 6.0 Preview
 
-Diese Fassung stellt die funktionierende Orbit-5-RC8-Logik aus dem lokalen Repository-Stand `4e81329` wieder her. Die angehängte Canva-Datei und die am 30.09.2026 abgerufene GitHub-Index waren vereinfachte Demos. Die Ersatzdatei übernimmt das Erscheinungsbild behutsam in den ursprünglichen DOM; alle fünf JavaScript-Blöcke des funktionierenden Stands sind unverändert.
+TagGen Universe gestaltet Cover für Hörspiel-Tags und bereitet sie für den Druck vor. Die neue Oberfläche baut auf der bestehenden Orbit-Logik für Suche, Canvas, Sammlung, Druck und lesenden NFC-Zugriff auf.
 
-## Einsetzen
+## Funktionen
 
-1. Den aktuellen Stand deiner Website vorher sichern.
-2. `index.html`, `sw.js`, `manifest.webmanifest` und `assets/` aus diesem Paket gemeinsam in das Repository **TagGen-Orbit** übernehmen. Die `.cjs`-Dateien und `visual-refinements.css` sind Entwicklungsdateien; die Gestaltung ist bereits in der Index eingebettet.
-3. `CREDITS_AND_RIGHTS.md` enthält die bisher abgestimmten Quellen- und Nutzungshinweise. Vorhandene eigene Betreiberangaben auf der Website beibehalten.
-4. Nach GitHub-Pages-Veröffentlichung die Seite neu laden, die installierte PWA gegebenenfalls schließen und wieder öffnen. Der Service Worker hat einen neuen Cache-Namen. Private Browserdaten nicht zum Aktualisieren löschen.
-5. Kurz prüfen: Motiv suchen, Cover gestalten, PNG speichern, in Sammlung übernehmen, Projekt sichern/laden und einen Kontrollbogen bei 100 % drucken. BLE in Bluefy beziehungsweise einem kompatiblen Browser prüfen.
+- Sammlung als Startseite, Welten als Kategorien und geführtes Erstellen.
+- Katalogsuche, eigenes Cover oder Bildstapel mit bis zu zwölf PNG-, JPEG- oder WebP-Dateien (je maximal 10 MB).
+- Dateinamen helfen bei der Inhaltssuche. Nur eindeutig exakte Titel werden automatisch zugeordnet; unsichere Treffer müssen bestätigt werden.
+- Runder oder quadratischer Cover-Editor mit Vorlagen und optionaler Feinabstimmung.
+- Tag-Pass mit getrennten Angaben zu Inhalt, Audio-ID, NFC-UID, Welt, Druckdatum und physischem Format.
+- A4-Druckbogen mit optionalen Rückseiten; PDF über den Druckdialog des Browsers.
+- Automatischer heller/dunkler Bildschirmmodus; Papier und Coverfarben bleiben unverändert.
+- Private Projektdateien und bestehende Orbit-Sammlungsdateien weiterhin lesbar.
 
-## Wiederhergestellt
+Die Sammlung ist derzeit ein Arbeitsstapel mit zwölf Plätzen. Welten sind Kategorien, keine unbegrenzten Bibliotheken. Druckdatum wird bewusst bestätigt. NFC wird lesend verwendet; die App erfindet keine UID.
 
-- Asynchroner V1-/V2-Katalog, Cache und JSON-Import, Suche, Favoriten und Pagination.
-- Echter Bildimport und PNG-Export über Canvas; runde und quadratische Cover.
-- Druckplätze, Kopieren/Verschieben/Löschen, Kalibrierung, originale A4-Geometrien und Duplex-Rückseiten mit QR.
-- Private Sammlung, Projekte, Migration älterer Dateien und getrennte Audio-ID/Tag-UID.
-- Lesender NFC-Archiver-BLE-Zugriff und optionaler Community-Dump-Abgleich mit anschließendem Cover-Vorschlag.
-- Orbit-Logo, PWA, Quellen- und Nutzungshinweise; Links auf das umbenannte Repository angepasst.
+## Betrieb und Aktualisierung
 
-## Übernommene Grafikideen
+Für GitHub Pages gemeinsam veröffentlichen: `index.html`, `universe.js`, `universe.css`, `sw.js`, `manifest.webmanifest` und `assets/`. Lokal über einen HTTP-Server öffnen, zum Beispiel `python3 -m http.server 8000`.
 
-Dezente Orbit-Kreise im Hintergrund und an der Vorschau, klarere Überschrift, ruhige weiße Karten, rosa aktive Navigation und Auswahl, Live-Kennzeichnung der echten Vorschau sowie ein Orbit-Zeichen im leeren Sammlungsbereich. Systemschriften halten die Darstellung offline nutzbar. Die bestehende Zwei-Spalten-Bibliothek auf Mobil, acht Treffer am Desktop und die mobile Schrittführung bleiben erhalten.
+Die Offline-Hülle enthält die Oberfläche einschließlich Universe-CSS und -JavaScript. Nach einer erfolgreichen Online-Installation ist sie offline verfügbar. Externe Kataloge und Cover sind nicht Bestandteil des Shell-Caches. Private Daten bleiben im Browser beziehungsweise in selbst exportierten Projektdateien; es gibt keine Cloud-Synchronisierung.
 
-Canva-SDKs, Tailwind-/Icon-CDNs, nicht im Browser ladbare `canva://`-Bilder und Demo-Handler sind nicht enthalten. Die stilisierte rechteckige Demo-Vorschau wird durch die echte runde/quadratische Canvas-Ausgabe ersetzt.
+Nach einer Aktualisierung die Seite neu laden und eine installierte PWA gegebenenfalls schließen und wieder öffnen. Private Browserdaten nicht zum Aktualisieren löschen. Ohne `universe.js` bleibt die Startseite sichtbar und bietet einen direkten Zugang zum bestehenden Cover-Studio.
 
-## Prüfung am 30.09.2026
+`apply-v6.py` ist für die aktuelle Universe-Version nicht erforderlich. Es bleibt als historische Upgrade-Hilfe erhalten und prüft eine vorhandene Universe-Integration ohne Änderungen.
 
-`node flow-integrity-test.cjs` besteht: Migration, Inhalt/Tag-Trennung, Bearbeitung, Export/Import, Frontseitenübernahme, UID-Zuordnung, abweichende Dumps, Community-Abgleich und BLE-Schreibsperre.
+## Entwicklung und Prüfung
 
-`node recovery-smoke-test.cjs` besteht mit dem nativen Canvas-Paket: tatsächlicher Bildimport, runde/quadratische Ausgabe, echte PNG-Dateisignatur, Platzierung, einseitiger und zweiseitiger Druckaufruf sowie privater Projekt-Export. Der DOM und Reader sind dabei simuliert. Für den Canvas-Test wird `@napi-rs/canvas` benötigt; der Workflow-Test läuft mit Node allein.
+`flow-integrity-test.cjs` prüft Migration, Inhalts-/Tag-Trennung, Projekt-Rundlauf und NFC-Schutz. `recovery-smoke-test.cjs` prüft tatsächlichen Canvas-Import und Druckgeometrien mit `@napi-rs/canvas`. `universe-browser-test.cjs` prüft Desktop- und Mobilabläufe in Chromium und WebKit sowie hellen/dunklen Modus und den Start ohne Universe-JavaScript. `universe-offline-test.cjs` prüft Shell-Installation, alte Cache-Bereinigung und Offline-Antworten.
 
-Alle 183 ursprünglichen HTML-IDs sind eindeutig und vorhanden; die fünf JavaScript-Blöcke stimmen mit der funktionierenden Ausgangsfassung überein. Es gibt keine externen Script-/Schriftabhängigkeiten. Kataloge, Online-Cover und optionale Community-Dumps werden wie im ursprünglichen Orbit über die dokumentierten Anbieter geladen.
+Die automatisierten Prüfungen laufen im Workflow **Universe V6 checks**. Physische NFC-Hardware, reale Drucker und Gerätekalibrierung müssen zusätzlich am Zielgerät geprüft werden.
 
-Ein vollständiger Browserlauf, eine neue Safari-/Druckerabnahme und ein physischer BLE-Test wurden hier nicht durchgeführt. Es ist kein Browserprogramm in der Umgebung installiert. Die Dateien sind vorbereitet, noch nicht veröffentlicht.
+Details zur V6: [UNIVERSE_V6.md](UNIVERSE_V6.md). Änderungen: [CHANGELOG.md](CHANGELOG.md). Quellen und Nutzungshinweise: [CREDITS_AND_RIGHTS.md](CREDITS_AND_RIGHTS.md).

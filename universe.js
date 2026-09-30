@@ -193,5 +193,5 @@ el('universe-batch-add').onclick=()=>{
 };
 // Entry links survive editor, collection and print; unknown technical data remain empty.
 const originalSelectItem=selectItem;selectItem=function(item){originalSelectItem(item);syncSmart();};
-syncSmart();go('home');
+syncSmart();go('home');el('universe-start-fallback').hidden=true;
 })();

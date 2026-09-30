@@ -91,7 +91,7 @@ def check_universe():
         "universe.css": [
             "Universe system theme", "@media screen and (prefers-color-scheme:dark)",
         ],
-        "sw.js": ["taggen-orbit-shell-6-universe-system-theme"],
+        "sw.js": ["taggen-universe-shell-6-0-0"],
     }
     for filename, required in checks.items():
         path = Path(filename)

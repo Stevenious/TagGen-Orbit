@@ -2,7 +2,7 @@ name: Universe V6 checks
 on:
   pull_request:
   push:
-    branches: [codex/universe-v6, codex/universe-v6-system-theme]
+    branches: [codex/universe-v6, codex/universe-v6-system-theme, codex/universe-v6-startup]
 permissions:
   contents: read
 jobs:
@@ -20,6 +20,8 @@ jobs:
         run: npx playwright install --with-deps chromium webkit
       - name: Validate uploaded patch compatibility
         run: python3 universe-patch-test.py
+      - name: Offline shell regression
+        run: node universe-offline-test.cjs
       - name: Existing identity and NFC regression
         run: node flow-integrity-test.cjs
       - name: Existing image and print regression
