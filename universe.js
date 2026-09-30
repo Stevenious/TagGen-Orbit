@@ -9,7 +9,7 @@ const physicalFormats=[
  ['square43','Quadratkapsel · 43 × 43 mm'],['capsule43','Münzkapsel · Rund 43 mm'],
  ['round25','Freies Format · Rund 25 mm']
 ];
-const view={world:'',passportId:null,batch:[],batchBusy:false,batchGeneration:0,cardGeneration:0};
+const view={world:'',passportId:null,batch:[],batchBusy:false,editorFormatChanged:false,batchGeneration:0,cardGeneration:0};
 const node=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
 const button=(text,fn,cls='')=>{const b=node('button',text,cls);b.type='button';b.onclick=fn;return b;};
 const snapshot=()=>api().snapshot();
@@ -17,11 +17,11 @@ const formatName=k=>physicalFormats.find(x=>x[0]===k)?.[1]|| (k?'Eigenes Format'
 const addOptions=(select,values)=>{for(const [value,label] of values){const o=node('option',label);o.value=value;select.append(o);}};
 function safeCloseMenu(){const menu=el('universe-more');if(menu)menu.open=false;}
 function startSearch(query='',keepEntry=false){
- if(!keepEntry)api().clearEditing();
+ if(!keepEntry){api().clearEditing();view.editorFormatChanged=false;}
  el('search').value=query;state.page=0;search();go('studio');step('library');el('search').focus({preventScroll:true});
 }
 function startOwn(){
- api().clearEditing();go('studio');el('custom').click();step('editor');
+ api().clearEditing();view.editorFormatChanged=false;go('studio');el('custom').click();step('editor');
 }
 function openPassport(id){view.passportId=id;go('passport');}
 function cardStatus(item){return !item.content?.design?'Cover noch offen':!item.confirmed?'Vorschlag prüfen':item.universe?.printedAt?'Druck bestätigt':'Cover bereit';}
@@ -101,7 +101,7 @@ for(const [name,values] of Object.entries(styles)){const b=button(name,()=>{Obje
 const backLabel=node('label','Rückseite'),back=node('select');back.id='universe-editor-back';addOptions(back,[['none','Keine'],['title','Titel'],['qr','Titel + QR · Pro']]);backLabel.append(back);smart.append(backLabel);
 const pro=node('details',undefined,'universe-pro');pro.id='universe-pro';pro.append(node('summary','Feinabstimmung · Pro'));const proControls=node('div');proControls.id='universe-pro-controls';for(const child of oldControls)proControls.append(child);pro.append(proControls);settings.replaceChildren(smart,pro);
 const shapeSelect=el('cover-shape');shapeSelect.addEventListener('input',()=>syncSmart());
-format.onchange=async()=>{const key=format.value;const accepted=await applyGeometry(Core.presets[key],key);if(!accepted){syncSmart();return;}state.design.shape=Core.presets[key].shape||'round';state.dirty=true;syncControls();renderEditor();};
+format.onchange=async()=>{const key=format.value;const accepted=await applyGeometry(Core.presets[key],key);if(!accepted){syncSmart();return;}state.design.shape=Core.presets[key].shape||'round';view.editorFormatChanged=true;state.dirty=true;syncControls();renderEditor();};
 back.onchange=()=>{const b=state.design.back;b.enabled=back.value!=='none';b.qr=back.value==='qr';b.titleOnly=back.value==='title';b.mode='collection';b.includeUid=false;syncBack();state.dirty=true;if(back.value==='qr'){pro.open=true;el('back-options').open=true;}};
 function syncSmart(){if(!el('universe-editor-format'))return;const key=state.design.shape==='square'?'square43':physicalFormats.some(x=>x[0]===state.preset&&Core.presets[x[0]].shape!=='square')?state.preset:'capsule43';format.value=key;const b=state.design.back||{};back.value=!b.enabled?'none':b.qr===false?'title':'qr';}
 const originalRenderEditor=renderEditor;renderEditor=function(){syncSmart();return originalRenderEditor();};
@@ -113,9 +113,15 @@ el('collection-add-cover').onclick=()=>{
  const s=snapshot(),id=existing||s.items.at(-1)?.entryId;
  if(id&&(existing?!api().activeEntryId():s.items.length===before+1)) {
    if(!existing)api().setMetadata(id,{preset:state.preset,carrier:state.design.shape==='square'?'customTag':state.preset==='capsule43'?'capsule43':'customTag'});
+   else if(view.editorFormatChanged)api().setMetadata(id,{preset:state.preset});
+   view.editorFormatChanged=false;
    openPassport(id);
  }
 };
+const originalOpenEntry=api().openEntry;
+api().openEntry=function(id,searchMode=false){view.editorFormatChanged=false;return originalOpenEntry.call(api(),id,searchMode);};
+const originalUpdateHandler=el('collection-save-cover').onclick;
+el('collection-save-cover').onclick=()=>{const id=api().activeEntryId();originalUpdateHandler();if(id&&!api().activeEntryId()){if(view.editorFormatChanged)api().setMetadata(id,{preset:state.preset});view.editorFormatChanged=false;}};
 el('universe-search-form').onsubmit=e=>{e.preventDefault();startSearch(el('universe-search').value);};
 el('universe-start-search').onclick=()=>startSearch();
 el('universe-start-own').onclick=startOwn;
