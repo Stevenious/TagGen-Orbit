@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-"""TagGen Orbit V6 · Stufe 1. Aufruf im Repo-Ordner: python3 apply-v6.py
+"""TagGen Orbit V6 · Stufe 1 / Universe-Integrationsprüfung.
+Aufruf im Repo-Ordner: python3 apply-v6.py
 Ändert nur Texte, Versionsangaben und fügt ein Dark-Mode-Stylesheet hinzu.
+Auf Universe prüft dieses Skript die vorhandene Integration, ohne sie zu überschreiben.
 Die JavaScript-Logik bleibt unverändert. Bricht ab, ohne etwas zu schreiben,
 wenn ein erwartetes Muster nicht genau so oft vorkommt wie erwartet."""
 import sys
@@ -38,7 +40,7 @@ INDEX = [
  ("Orbit 5.0.0 Release Candidate 8", "Orbit 6.0.0", 2),       # Footer, Systeminfo
  ("appVersion:'5.0-rc.8'", "appVersion:'6.0.0'", 1),
  ('<option value="auto">Beste Treffer</option>', '<option value="auto">Automatisch (empfohlen)</option>', 1),
- ('<option value="exact">Exakt</option>', '<option value="exact">Nur exakte Titel</option>', 1),
+ ('<option value="exact">Exakt</option>', '<option value="exact">Nur exakte Treffer</option>', 1),
  ('<option value="strong">Exakt + Strong</option>', '<option value="strong">Alle Suchwörter enthalten</option>', 1),
  ('<option value="fuzzy">Mit Fuzzy</option>', '<option value="fuzzy">Auch ähnliche Schreibweisen</option>', 1),
  ('<button id="flow-check" class="quiet">Flow prüfen</button>', '<button id="flow-check" class="quiet">Selbsttest ausführen</button>', 1),
@@ -74,7 +76,36 @@ def patch(path, rules):
         text = text.replace(old, new)
     return p, text
 
+def check_universe():
+    """Die Universe-Dateien wurden bereits separat integriert: nur prüfen."""
+    index = Path("index.html").read_text(encoding="utf-8")
+    if "<title>TagGen Universe 6" not in index:
+        return False
+    checks = {
+        "index.html": [
+            "Automatisch (empfohlen)", "Nur exakte Treffer",
+            "Alle Suchwörter enthalten", "Auch ähnliche Schreibweisen",
+            "Selbsttest ausführen", 'id="audio-id-help"',
+            "appVersion:'6.0.0-preview'",
+        ],
+        "universe.css": [
+            "Universe system theme", "@media screen and (prefers-color-scheme:dark)",
+        ],
+        "sw.js": ["taggen-orbit-shell-6-universe-system-theme"],
+    }
+    for filename, required in checks.items():
+        path = Path(filename)
+        text = path.read_text(encoding="utf-8") if path.is_file() else ""
+        missing = [value for value in required if value not in text]
+        if missing:
+            sys.exit(f"ABBRUCH {filename}: Universe-Ergänzungen fehlen: {missing}. Nichts geschrieben.")
+    print("OK Universe V6: Dark Mode, Suchtexte, ID-Hinweis und Cache integriert. Nichts geschrieben.")
+    return True
+
+
 if __name__ == "__main__":
+    if check_universe():
+        sys.exit(0)
     jobs = [patch("index.html", INDEX), patch("sw.js", SW)]
     for p, text in jobs:
         p.write_text(text, encoding="utf-8")

@@ -49,3 +49,45 @@ body[data-mobile-step=editor] .settings-panel .controls{display:flex;flex-direct
 @media(max-width:650px){.studio-layout,.universe-passport-grid{grid-template-columns:1fr}.universe-choices{grid-template-columns:1fr}.universe-choices>button{padding:20px;gap:8px}.universe-worlds{grid-template-columns:repeat(2,minmax(0,1fr))}.page-heading{align-items:flex-start;flex-wrap:wrap}.page-heading h1,#view-create>h1{font-size:27px}.universe-search{gap:6px;padding:8px}.universe-search button{padding:10px}.universe-card-copy{padding:12px}.universe-card-copy strong{font-size:13px}.universe-passport-art{padding:22px}.universe-passport-box{padding:20px}.universe-next .row{align-items:flex-start;flex-wrap:wrap}.universe-batch-row{grid-template-columns:52px minmax(0,1fr)}.universe-batch-row img{width:52px;height:52px}.universe-batch-row input{font-size:16px}.collection-tools .row{display:flex}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 @media print{.universe-more,.main-nav,#view-home,#view-create,#view-passport,#universe-collection-cards,#universe-editor-start,.universe-smart,.universe-filter,.universe-collection-tools{display:none!important}}
+
+/* Universe system theme — adapted from apply-v6.py; screen-only, never print. */
+@media screen and (prefers-color-scheme:dark){
+ :root{color-scheme:dark;--ink:#e8ecf4;--muted:#a9b4c9;--line:#364158;--rose:#b4a5ff;--soft:#322d4c;--blue:#a8c4ff;--paper:#151b27;--shadow:0 12px 36px #00000059;background:#0f141d;color:var(--ink)}
+ body{background:#0f141d}
+ .app-header,.app-header>.main-nav,.slot-bar{background:#151b27}
+ .panel,.card,.collection-item,.print-more,.dialog,.universe-menu,.universe-search,.universe-card,.universe-empty,.universe-smart,.universe-collection-tools,.collection-tools,.universe-passport-art,.universe-passport-box,.universe-worlds button,.universe-choices>button{background:#151b27}
+ button,input,select,textarea,input[type=search],input[type=text],input[type=url],input[type=number]{background:#1b2332;color:var(--ink);border-color:var(--line)}
+ button:hover:not(:disabled){background:#29354c}
+ button.primary{background:var(--rose);color:#1b1331;border-color:var(--rose)}
+ button.primary:hover:not(:disabled){background:#c4b9ff}
+ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline-color:#b4a5ff}
+ .universe-search input{background:transparent}
+ .main-nav button[aria-current=page],.library-tabs button[aria-pressed=true],.mobile-steps button[aria-pressed=true]{background:var(--soft);border-color:#655786;color:var(--rose)}
+ .card-picture,.collection-thumb,.bridge-cover{background:#1f2839}
+ .card-open:hover:not(:disabled),.card.selected .card-open{background:transparent}
+ .card.selected{background:var(--soft)}
+ .code,.collection-empty,.batch-dropzone,.collection-flow div{background:#1b2332}
+ .preview-stage{background:linear-gradient(145deg,#1a2231,#151b27)}
+ .universe-art{background:linear-gradient(145deg,#27233e,#243247)}
+ .universe-art>span{color:#c3b6ff}
+ .universe-drop{background:var(--soft);border-color:#8775b1}
+ .batch-place{background:#1b2332;border-color:#536078}
+ .batch-place.ready,.collection-status.ready,.bridge-status span.ready{background:#173325;color:#a5e2b5}
+ .batch-place.review,.collection-status.fuzzy{background:#3a2f15;color:#efd693}
+ .collection-status.missing,.bridge-status span{background:#263247;color:#bcc8db}
+ .bridge-status span.linked{background:var(--soft);color:var(--rose)}
+ .alert{background:#33290f;color:#e8cf9a;border-color:#5a4a1e}
+ .favorite{background:#1b2332ed;color:#c7d1e2}
+ .match-label{background:#1b2332;color:#c5d0e3}
+ .pagination,.library-foot{background:#151b27}
+ .skeleton-picture{background:linear-gradient(90deg,#202a3a 25%,#2a3548 50%,#202a3a 75%);background-size:200% 100%}
+ .skeleton-line{background:#2a3548}
+ .toast{background:#253147;color:#eef2fa}
+ .sheet{background:#fff}
+ .sheet .slot,.sheet .slot:hover:not(:disabled){background:#fafbfc;color:#7b8698;border-color:#dbe0e8}
+ .sheet .slot.occupied,.sheet .slot.occupied:hover:not(:disabled){background:#fff;border-color:transparent}
+}
+@media print{
+ :root{color-scheme:light}
+ .sheet,.print-root,body{background:#fff!important}
+}
