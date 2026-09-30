@@ -17,7 +17,7 @@ const server=http.createServer((req,res)=>{
 const timeout=30000;
 async function run(engine,name,width){
  const browser=await engine.launch({headless:true});
- const context=await browser.newContext({viewport:{width,height:1000},acceptDownloads:true});
+ const context=await browser.newContext({viewport:{width,height:1000},isMobile:width<=960,hasTouch:width<=960,acceptDownloads:true});
  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://raw.githubusercontent.com/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(catalog)}));
  page.setDefaultTimeout(15000);
@@ -54,7 +54,6 @@ async function run(engine,name,width){
  assert(await page.locator('#view-home').isVisible());
  await page.locator('#universe-home-cards button').first().click();
  assert(await page.locator('#universe-passport input[type="checkbox"]').isChecked());
- await page.locator('#universe-passport-art').count(); // no dependency on a generated id
  await page.locator('.universe-passport-art button').click();
  await page.waitForFunction(()=>!document.getElementById('add-cover').disabled);
  assert.equal(await page.evaluate(()=>window.orbitCollection.activeEntryId()),id);
