@@ -102,7 +102,7 @@ const backLabel=node('label','Rückseite'),back=node('select');back.id='universe
 const pro=node('details',undefined,'universe-pro');pro.id='universe-pro';pro.append(node('summary','Feinabstimmung · Pro'));const proControls=node('div');proControls.id='universe-pro-controls';for(const child of oldControls)proControls.append(child);pro.append(proControls);settings.replaceChildren(smart,pro);
 const shapeSelect=el('cover-shape');shapeSelect.addEventListener('input',()=>syncSmart());
 format.onchange=async()=>{const key=format.value;const accepted=await applyGeometry(Core.presets[key],key);if(!accepted){syncSmart();return;}state.design.shape=Core.presets[key].shape||'round';state.dirty=true;syncControls();renderEditor();};
-back.onchange=()=>{const b=state.design.back;b.enabled=back.value!=='none';b.qr=back.value==='qr';b.mode='collection';b.includeUid=false;syncBack();state.dirty=true;if(back.value==='qr'){pro.open=true;el('back-options').open=true;}};
+back.onchange=()=>{const b=state.design.back;b.enabled=back.value!=='none';b.qr=back.value==='qr';b.titleOnly=back.value==='title';b.mode='collection';b.includeUid=false;syncBack();state.dirty=true;if(back.value==='qr'){pro.open=true;el('back-options').open=true;}};
 function syncSmart(){if(!el('universe-editor-format'))return;const key=state.design.shape==='square'?'square43':physicalFormats.some(x=>x[0]===state.preset&&Core.presets[x[0]].shape!=='square')?state.preset:'capsule43';format.value=key;const b=state.design.back||{};back.value=!b.enabled?'none':b.qr===false?'title':'qr';}
 const originalRenderEditor=renderEditor;renderEditor=function(){syncSmart();return originalRenderEditor();};
 el('add-cover').textContent='Zum Druckbogen →';

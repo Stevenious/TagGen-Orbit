@@ -43,6 +43,9 @@ async function run(engine,name,width){
  await page.waitForFunction(()=>!document.getElementById('add-cover').disabled);
  await page.locator('#universe-layouts button').filter({hasText:'Kids'}).click();
  await page.waitForFunction(()=>!document.getElementById('add-cover').disabled);
+ await page.locator('#universe-editor-back').selectOption('title');
+ assert(await page.evaluate(()=>state.design.back.enabled&&state.design.back.titleOnly&&!state.design.back.qr));
+ await page.locator('#universe-editor-back').selectOption('none');
  await page.locator('#collection-add-cover').click();
  assert(await page.locator('#view-passport').isVisible());
  const id=await page.evaluate(()=>window.orbitCollection.snapshot().items[0].entryId);
