@@ -28,7 +28,7 @@ async function run(engine,name,width,theme="light"){
  const appearance=await page.evaluate(()=>({scheme:getComputedStyle(document.documentElement).colorScheme,body:getComputedStyle(document.body).backgroundColor,ink:getComputedStyle(document.getElementById('universe-home-title')).color}));
  assert.equal(appearance.scheme,theme);
  assert.equal(appearance.body,theme==='dark'?'rgb(15, 20, 29)':'rgb(247, 248, 251)');
- function luminance(rgb){const channels=rgb.match(/\\d+/g).slice(0,3).map(Number).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);return .2126*channels[0]+.7152*channels[1]+.0722*channels[2];}
+ function luminance(rgb){const channels=rgb.match(/\d+/g).slice(0,3).map(Number).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);return .2126*channels[0]+.7152*channels[1]+.0722*channels[2];}
  function contrast(fg,bg){const a=luminance(fg),b=luminance(bg);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);}
  assert(contrast(appearance.ink,appearance.body)>=4.5,name+': heading contrast');
  assert.equal(await page.locator('#match option[value="exact"]').textContent(),'Nur exakte Treffer');
