@@ -1,0 +1,33 @@
+/* Canva visual ideas adapted to Orbit's working DOM. Screen decoration only. */
+:root{--canvas:#f3f6f9;--shadow:0 12px 36px rgba(23,32,51,.045);background:var(--canvas)}
+body{background:var(--canvas)}
+.orbit-backdrop{position:fixed;width:520px;height:520px;right:-260px;top:110px;border:1px solid rgba(218,35,85,.1);border-radius:50%;pointer-events:none;z-index:-1}
+.orbit-backdrop::before,.orbit-backdrop::after{content:"";position:absolute;inset:58px;border:1px solid rgba(23,32,51,.07);border-radius:50%}
+.orbit-backdrop::after{inset:130px;border-color:rgba(218,35,85,.12)}
+body{isolation:isolate}
+.app-header{background:rgba(255,255,255,.94);gap:24px}
+.main-nav{background:transparent;border-color:transparent}
+.main-nav button[aria-current=page]{background:var(--soft);box-shadow:none}
+.page-heading{align-items:start;margin-bottom:26px}
+.page-heading .eyebrow{margin-bottom:9px}
+.page-heading h1{font-size:clamp(25px,3vw,39px);line-height:1.12;max-width:780px;font-weight:800}
+.page-heading p{margin-top:10px;line-height:1.6}
+.panel{background:#fff;box-shadow:var(--shadow)}
+.panel-head h2{font-weight:750}
+.card{transition:border-color .18s,box-shadow .18s}
+.card.selected{background:var(--soft);box-shadow:0 0 0 2px rgba(218,35,85,.12)}
+.card.selected .card-open{background:var(--soft)}
+.preview-stage{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(145deg,#f3f6f9,#fff);padding:34px}
+.preview-stage::before,.preview-stage::after{content:"";position:absolute;width:360px;height:360px;border:1px solid rgba(23,32,51,.08);border-radius:50%;z-index:-1;pointer-events:none}
+.preview-stage::before{top:-230px;left:-180px}
+.preview-stage::after{bottom:-235px;right:-180px;border-color:rgba(218,35,85,.16)}
+.preview-live{display:inline-flex;align-items:center;gap:6px;color:#166b51;font-size:11px;font-weight:650}
+.preview-live::before{content:"";width:7px;height:7px;background:#21a179;border-radius:50%}
+.preview-heading-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.collection-empty{background:linear-gradient(145deg,#f8fafc,#fff);padding:30px 18px}
+.collection-empty::before{content:"";display:block;width:44px;height:44px;border:2px solid var(--rose);border-radius:50%;margin:0 auto 16px;box-shadow:0 0 0 8px #fff,0 0 0 9px #dfe4ed;background:radial-gradient(circle at 80% 18%,var(--rose) 0 4px,transparent 4.5px)}
+.app-footer button{font-size:11px;background:transparent;min-height:36px;padding:7px 10px}
+@media(hover:hover){.card:hover{border-color:#b8c5d8;box-shadow:0 6px 16px rgba(23,32,51,.06)}}
+@media(max-width:960px){.app-header{gap:10px}.page-heading{margin-bottom:18px}.page-heading h1{font-size:26px}.preview-stage{padding:29px}.preview-heading-meta{gap:8px}.orbit-backdrop{width:340px;height:340px;right:-225px;top:135px}.collection-empty{padding:26px 16px}}
+@media(prefers-reduced-motion:reduce){.card{transition:none}}
+@media print{.orbit-backdrop,.preview-live{display:none!important}body{background:white!important}}
