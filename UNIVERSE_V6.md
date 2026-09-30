@@ -28,3 +28,10 @@ CI führt die bestehenden Tests aus und prüft neue Wege mit Chromium und WebKit
 8. Stapelimport: unsichere Dateinamen ändern weder UID noch vermeintliche Audioquelle.
 
 Bildstapel werden lokal auf maximal 600 px pro Kante und WebP komprimiert (etwa 380 dpi bei 40 mm). Der Browser-Speicherstatus steht sichtbar über den Sammlungskarten; bei vollem Speicher muss die Sammlung als Datei gesichert werden.
+
+## Ergänzungen aus apply-v6.py
+Die Stufe-1-Ideen wurden auf die bereits integrierte Universe-Oberfläche angepasst: automatisches helles/dunkles Erscheinungsbild, verständliche Suchfilter, „Selbsttest ausführen“, eine klare Schrittfolge sowie die Trennung von Audio-ID und Tag-UID. Die exakte Suche heißt bewusst „Nur exakte Treffer“, weil sie auch Serie, Modell und Audio-ID erkennt. Die Such- und Drucklogik bleibt unverändert.
+
+Dark Mode gilt nur für die Bildschirmoberfläche. A4-Vorschau, Druck- und PDF-Ausgabe bleiben weiß; Coverfarben werden nicht an die Systemeinstellung angepasst. Projektmetadaten nennen TagGen Universe 6.0.0-preview. Ein neuer Service-Worker-Cache enthält die aktualisierte Oberfläche.
+
+Das Python-Skript bleibt als Werkzeug für den alten Orbit-5-RC8-Stand erhalten. Auf dem aktuellen Universe-Stand prüft es die Integration und beendet sich ohne Schreibzugriff. Es rollt die Universe-Navigation nicht auf das alte Studio zurück.

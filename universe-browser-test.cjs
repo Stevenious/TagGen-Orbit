@@ -15,9 +15,9 @@ const server=http.createServer((req,res)=>{
  try{const body=fs.readFileSync(file);res.setHeader('Content-Type',file.endsWith('.js')?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.webmanifest')?'application/manifest+json':file.endsWith('.png')?'image/png':'text/html');res.end(body);}catch{res.writeHead(404);res.end();}
 });
 const timeout=30000;
-async function run(engine,name,width){
+async function run(engine,name,width,theme="light"){
  const browser=await engine.launch({headless:true});
- const context=await browser.newContext({viewport:{width,height:1000},isMobile:width<=960,hasTouch:width<=960,acceptDownloads:true});
+ const context=await browser.newContext({viewport:{width,height:1000},isMobile:width<=960,hasTouch:width<=960,colorScheme:theme,acceptDownloads:true});
  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://raw.githubusercontent.com/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(catalog)}));
  page.setDefaultTimeout(15000);
@@ -25,6 +25,14 @@ async function run(engine,name,width){
  await page.goto('http://127.0.0.1:'+server.address().port+'/',{waitUntil:'networkidle'});
  await page.waitForFunction(()=>window.Universe&&window.orbitCollection&&state.items.length>=8);
  assert(await page.locator('#view-home').isVisible(),name+': collection-first home');
+ const appearance=await page.evaluate(()=>({scheme:getComputedStyle(document.documentElement).colorScheme,body:getComputedStyle(document.body).backgroundColor,ink:getComputedStyle(document.getElementById('universe-home-title')).color}));
+ assert.equal(appearance.scheme,theme);
+ assert.equal(appearance.body,theme==='dark'?'rgb(15, 20, 29)':'rgb(247, 248, 251)');
+ function luminance(rgb){const channels=rgb.match(/\d+/g).slice(0,3).map(Number).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);return .2126*channels[0]+.7152*channels[1]+.0722*channels[2];}
+ function contrast(fg,bg){const a=luminance(fg),b=luminance(bg);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);}
+ assert(contrast(appearance.ink,appearance.body)>=4.5,name+': heading contrast');
+ assert.equal(await page.locator('#match option[value="exact"]').textContent(),'Nur exakte Treffer');
+ assert.equal(await page.locator('#flow-check').textContent(),'Selbsttest ausführen');
  assert.equal(await page.locator('.main-nav [data-view]').count(),4);
  assert.equal(await page.locator('.main-nav [data-view="workshop"]').count(),0);
  await page.locator('.main-nav [data-view="create"]').click();
@@ -37,6 +45,10 @@ async function run(engine,name,width){
  assert(await page.locator('.preview-panel').isVisible());
  assert(!await page.locator('.library-panel').isVisible());
  assert(!await page.locator('#universe-pro').getAttribute('open'));
+ const help=await page.locator('#audio-id-help').textContent();
+ assert(help.includes('Tag-UID')&&help.includes('Audio-ID'));
+ const buttonColors=await page.locator('#add-cover').evaluate(b=>({fg:getComputedStyle(b).color,bg:getComputedStyle(b).backgroundColor}));
+ assert(contrast(buttonColors.fg,buttonColors.bg)>=4.5,name+': primary button contrast');
  await page.locator('#universe-editor-format').selectOption('square43');
  await page.waitForFunction(()=>state.preset==='square43'&&state.design.shape==='square'&&!document.getElementById('add-cover').disabled);
  await page.locator('#bottom-text').fill('Meine Waldgeschichte');await page.locator('#bottom-text').dispatchEvent('input');
@@ -69,6 +81,14 @@ async function run(engine,name,width){
  await page.waitForFunction(()=>window.__prints===1);
  assert(await page.locator('#print-back-root').isHidden());
  assert.equal(await page.evaluate(()=>document.getElementById('print-root').children[0].style.width),'43mm');
+ assert.equal(await page.locator('#sheet').evaluate(n=>getComputedStyle(n).backgroundColor),'rgb(255, 255, 255)');
+ const canvasBefore=await page.evaluate(()=>document.getElementById('print-root').children[0].toDataURL());
+ await page.emulateMedia({media:'print'});
+ assert.equal(await page.evaluate(()=>getComputedStyle(document.body).backgroundColor),'rgb(255, 255, 255)');
+ assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).colorScheme),'light');
+ assert.equal(await page.evaluate(()=>document.getElementById('print-root').children[0].toDataURL()),canvasBefore);
+ await page.emulateMedia({media:'screen'});
+ assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).colorScheme),theme);
  await page.locator('.main-nav [data-view="collection"]').click();
  assert.equal(await page.locator('#universe-collection-cards button').count(),1);
  await page.locator('#universe-collection-filter button').filter({hasText:'Musik',exact:true}).click();
@@ -101,5 +121,5 @@ async function run(engine,name,width){
 }
 (async()=>{
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
- try{await run(chromium,'desktop-chromium',1280);await run(chromium,'mobile-chromium',375);await run(webkit,'mobile-webkit',375);}finally{server.close();}
+ try{await run(chromium,'desktop-chromium',1280);await run(chromium,'mobile-chromium',375);await run(webkit,'mobile-webkit',375);await run(chromium,'desktop-chromium-dark',1280,'dark');await run(webkit,'mobile-webkit-dark',375,'dark');}finally{server.close();}
 })().catch(error=>{console.error(error);server.close();process.exit(1);});

@@ -2,7 +2,7 @@ name: Universe V6 checks
 on:
   pull_request:
   push:
-    branches: [codex/universe-v6]
+    branches: [codex/universe-v6, codex/universe-v6-system-theme]
 permissions:
   contents: read
 jobs:
@@ -18,6 +18,8 @@ jobs:
         run: npm install --no-save playwright@1.58.2 @napi-rs/canvas@0.1.80
       - name: Install desktop and Safari engine browsers
         run: npx playwright install --with-deps chromium webkit
+      - name: Validate uploaded patch compatibility
+        run: python3 universe-patch-test.py
       - name: Existing identity and NFC regression
         run: node flow-integrity-test.cjs
       - name: Existing image and print regression
