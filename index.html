@@ -2745,6 +2745,36 @@ for(const [id,mode] of [['all-tab','all'],['fav-tab','favs']])$(id).onclick=()=>
    for(const row of rows){const d={...structuredClone(row.design),shape:g.shape||'round',collectionId:row.id};d.back={...d.back,enabled:row.design.back?.enabled===true,qr:row.design.back?.qr!==false,mode:row.uid?'nfc':'collection',uid:row.uid||'',file:row.uid?row.dumpName:'',status:row.uid?'Datei strukturell geprüft':'',includeUid:Boolean(row.uid)};next[row.place]=d;}
    checkpoint();state.geometry=g;state.preset=preset;state.slots=next;state.selectedSlot=-1;state.moving=-1;try{Core.calibration(state.calibration,g);}catch{state.calibration={x:0,y:0};}syncCalibration();el('format').value=preset;el('format-note').textContent=formatNotes[preset];el('custom-layout').hidden=true;await renderSheet();el('mobile-count').textContent=next.filter(Boolean).length;go('print');toast('✓ '+rows.length+' Cover bereit · '+(paperMode()==='front'?'1 A4-Seite':'2 A4-Seiten mit QR-Rückseiten')+'.');
   }finally{c.busy=false;render();}}
+ async function printPending(){
+  if(c.busy)return;
+  c.busy=true;
+  try{
+   const eligible=c.items.filter(row=>ready(row)&&!row.printedAt);
+   const queued=new Set(state.slots.filter(Boolean).map(d=>d.collectionId));
+   const rows=eligible.filter(row=>!queued.has(row.id));
+   if(!rows.length){toast(eligible.length?'Alle druckbereiten Tags liegen bereits auf dem Druckbogen.':'Keine bestätigten, noch ungedruckten Cover vorhanden.');return;}
+   const preset=el('collection-format').value,g=Core.geometry(Core.presets[preset]);
+   if(state.preset!==preset&&state.slots.some(Boolean)){toast('Der belegte Druckbogen hat ein anderes Format. Zielformat angleichen oder den Bogen zuerst sichern und leeren.');return;}
+   const next=state.preset===preset?state.slots.slice():Array(g.cols*g.rows).fill(null);
+   const free=Array.from({length:next.length},(_,i)=>i).filter(i=>!next[i]);
+   if(free.length<rows.length){toast('Nicht genug freie Druckplätze: '+rows.length+' benötigt, '+free.length+' frei. Der Druckbogen bleibt unverändert.');return;}
+   if(rows.some(row=>(row.design.shape||'round')!==(g.shape||'round'))&&!await ask('Coverform für den Druck anpassen?','Nur die neuen Druckkopien werden angepasst. Gespeicherte Cover und belegte Druckplätze bleiben erhalten.'))return;
+   // Prefer saved positions, then fill free slots; never overwrite or relocate existing covers.
+   const planned=new Map();
+   for(const row of rows)if(Number.isInteger(row.place)&&free.includes(row.place)){planned.set(row.id,row.place);free.splice(free.indexOf(row.place),1);}
+   for(const row of rows)if(!planned.has(row.id))planned.set(row.id,free.shift());
+   for(const row of rows){
+    const d={...structuredClone(row.design),shape:g.shape||'round',collectionId:row.id};
+    d.back={...d.back,enabled:row.design.back?.enabled===true,qr:row.design.back?.qr!==false,mode:row.uid?'nfc':'collection',uid:row.uid||'',file:row.uid?row.dumpName:'',status:row.uid?'Datei strukturell geprüft':'',includeUid:Boolean(row.uid)};
+    next[planned.get(row.id)]=d;
+   }
+   checkpoint();state.geometry=g;state.preset=preset;state.slots=next;state.selectedSlot=-1;state.moving=-1;
+   try{Core.calibration(state.calibration,g);}catch{state.calibration={x:0,y:0};}
+   syncCalibration();el('format').value=preset;el('format-note').textContent=formatNotes[preset];el('custom-layout').hidden=true;
+   await renderSheet();el('mobile-count').textContent=next.filter(Boolean).length;go('print');
+   toast('✓ '+rows.length+' ungedruckte Cover ergänzt · bestehende Druckplätze erhalten.');
+  }finally{c.busy=false;render();}
+ }
  async function exportCollection(){if(c.busy)return;c.busy=true;try{const v=documentValue();for(const item of v.items)if(item.content?.design)item.content.design=await portableDesign(item.content.design);saveJSON(v,filename(c.name)+'.orbit-collection');toast('✓ Private Sammlungsdatei erstellt · einschließlich zugeordneter NFC-Dateien.');}catch(error){toast('Export fehlgeschlagen: '+error.message);}finally{c.busy=false;}}
  async function importCollection(file){if(!file||c.busy)return;c.busy=true;try{if(file.size>50000000)throw Error('Datei zu groß (max. 50 MB).');const v=validate(JSON.parse(await file.text()));if(c.items.length&&!await ask('Sammlung ersetzen?','Die geladene Sammlung ersetzt die aktuelle Arbeitsliste.'))return;Object.assign(c,{name:v.name,items:v.items,editing:null});el('collection-format').value=v.preset;render();go('collection');toast('✓ Sammlung geladen.');}catch(error){toast('Sammlung nicht geladen: '+error.message);}finally{c.busy=false;}}
  const zone=el('collection-dropzone');zone.onclick=()=>el('collection-dump-files').click();zone.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zone.click();}};zone.ondragover=e=>{e.preventDefault();zone.classList.add('batch-drop');};zone.ondragleave=()=>zone.classList.remove('batch-drop');zone.ondrop=async e=>{e.preventDefault();zone.classList.remove('batch-drop');const files=[...e.dataTransfer.files].filter(f=>/\.nfc(?:\.txt)?$|\.txt$/i.test(f.name));if(files.length)await importDumps(files);else toast('Keine unterstützten NFC-Dateien abgelegt.');};
@@ -2754,7 +2784,7 @@ for(const [id,mode] of [['all-tab','all'],['fav-tab','favs']])$(id).onclick=()=>
  el('collection-match').onclick=rematch;el('collection-cover-all').onclick=rematch;el('collection-print').onclick=printCollection;el('collection-export').onclick=exportCollection;
  el('collection-file').onchange=async e=>{const file=e.target.files[0];e.target.value='';await importCollection(file);};el('collection-name').onchange=()=>{c.name=el('collection-name').value.trim()||'Meine Sammlung';persist();};
  el('collection-save-cover').onclick=saveEditor;el('collection-add-cover').onclick=addEditor;el('collection-attach-dump').onclick=attachDump;el('collection-format').onchange=persist;
- window.orbitCollection={snapshot:documentValue,validate,
+ window.orbitCollection={snapshot:documentValue,validate,printPending,
  openEntry(id,searchMode=false){const row=c.items.find(x=>x.id===id);if(!row)return false;openRow(row,searchMode);return true;},
  clearEditing(){c.editing=null;el('collection-save-cover').hidden=true;el('collection-edit-note').hidden=true;},
  addDesigns(designs,preset){if(c.busy)throw Error('Sammlung wird gerade bearbeitet.');if(!Array.isArray(designs)||!designs.length||designs.length+c.items.length>MAX)throw Error('Maximal 12 Einträge pro Sammlung. Bitte bestehende Sammlung sichern oder weniger Bilder wählen.');if(!Object.hasOwn(Core.presets,preset))throw Error('Unbekanntes Format.');const checked=designs.map(d=>Core.validateDesign(d));for(const d of checked){const row=rowFromDesign(d);row.physicalPreset=preset;row.carrier='customTag';c.items.push(row);}el('collection-format').value=preset;render();return c.items.slice(-checked.length).map(r=>r.id);},
