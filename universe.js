@@ -45,7 +45,10 @@ function refreshHome(){
 function refreshCollection(){
  const s=snapshot(),filtered=s.items.filter(x=>!view.world||x.universe?.world===view.world);
  renderEntryCards(el('universe-collection-cards'),filtered);
- el('universe-collection-status').textContent=s.items.length+' / 12 Tags in „'+s.name+'“'+(view.world?' · '+view.world:'');
+ const queued=new Set(state.slots.filter(Boolean).map(d=>d.collectionId));
+ const pending=s.items.filter(x=>x.content.design&&x.confirmed&&!x.universe?.printedAt&&!queued.has(x.entryId)).length;
+ el('universe-collection-status').textContent=s.items.length+' / 12 Tags in „'+s.name+'“'+(view.world?' · '+view.world:'')+' · '+pending+' bereit für den nächsten Druck';
+ el('universe-print-pending').disabled=!pending;
  el('universe-collection-filter').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.world===view.world)));
 }
 function passport(){
@@ -137,7 +140,8 @@ const collectionStatus=node('p',undefined,'status');collectionStatus.id='univers
 const collectionCards=node('div',undefined,'universe-cards');collectionCards.id='universe-collection-cards';
 heading.after(filters,collectionStatus,el('collection-storage'),collectionCards);
 const batchActions=node('div',undefined,'universe-batch-actions');
-batchActions.append(button('Stapel zum Druckbogen →',()=>el('collection-print').click(),'primary'),button('Sammlung sichern',()=>el('collection-export').click()));
+const pendingPrint=button('Ungedruckte Cover ergänzen →',()=>api().printPending(),'primary');pendingPrint.id='universe-print-pending';
+batchActions.append(pendingPrint,button('Sammlung sichern',()=>el('collection-export').click()));
 collectionCards.after(batchActions);
 const manage=node('details',undefined,'universe-collection-tools');manage.append(node('summary','Sammlung verwalten · Name, Import & Sicherung'),document.querySelector('.collection-layout>.panel:first-child .panel-body'));document.querySelector('.collection-layout').before(manage);
 document.querySelector('.collection-flow').hidden=true;
