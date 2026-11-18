@@ -1,5 +1,12 @@
 # TagGen Universe – Changelog
 
+## Universe 6.0 Preview · Katalog lädt zuverlässig auf dem iPhone
+- Der Katalog-Cache liegt jetzt in IndexedDB. Safari begrenzt `localStorage` auf etwa 5 MB, die beiden Kataloge (je rund 3,8 MB) passten dort nicht hinein; ohne Cache blieb die Bibliothek bei schwachem Netz leer.
+- Ein vorhandener alter Cache in `localStorage` wird weiter genutzt und beim nächsten erfolgreichen Laden nach IndexedDB verschoben; danach wird der Platz in `localStorage` frei.
+- Die beiden Katalog-Downloads dürfen 45 statt 14 Sekunden dauern.
+- Ohne IndexedDB bleibt das bisherige Verhalten erhalten. „Cache löschen“ entfernt beide Kopien.
+- Neuer Regressionstest `tests/catalog-cache.cjs`.
+
 ## Universe 6.0 Preview · Suche über alle Sammlungen
 - Ein gelesener Tag (Flipper-Datei oder BLE-Reader) wird in allen Sammlungen gesucht und in seiner Sammlung geöffnet; die Prüfanzeige nennt die Sammlung.
 - Welten zeigen Tags aus der ganzen Bibliothek, Karten nennen ihre Sammlung und öffnen sie beim Antippen.
