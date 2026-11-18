@@ -1,0 +1,12 @@
+{
+  "format": "taggen-exchange",
+  "version": 2,
+  "meta": {
+    "app": "TeddyStudio",
+    "appVersion": "demo",
+    "created": "2026-11-18T12:00:00+01:00",
+    "privacy": "private",
+    "collection": "Demo-Hörspiele"
+  },
+  "entries": []
+}

@@ -1,5 +1,14 @@
 # TagGen Universe – Changelog
 
+## Universe 6.0 Preview · TeddyStudio-Import (Demonstrator)
+- Neues Austauschformat `taggen-exchange` v1 mit Spezifikation (`exchange/SCHEMA.md`), JSON-Schema und erfundenen Beispieldaten (`tools/make-exchange-examples.py`).
+- Erstellen → „Aus TeddyStudio importieren“: liest eine Austauschdatei oder die heutigen TeddyStudio-Exporte (Cover-Manifest, optional Sammlung.json, dazu die Coverbilder).
+- Vorschau mit Status je Eintrag (neu, bereits vorhanden, Konflikt, fehlerhaft) und Begründung; erst „Übernehmen“ verändert die Bibliothek.
+- Mehr als 12 Einträge werden auf mehrere Sammlungen verteilt; alternativ Import in eine Sammlung mit freien Plätzen.
+- Übernommen werden Titel, Serie, Cover, TeddyCloud-Modell, Audio-ID und Tag-UID (RUID wird geprüft); keine Pfade, kein Audio, keine Dumps.
+- Mehrdeutige Bildnamen (z. B. mehrere `cover.jpg`) werden nicht geraten. Große Cover werden auf 800 px verkleinert.
+- Neuer Regressionstest `tests/exchange-import.cjs`; `exchange.js` ist Teil der Offline-Hülle.
+
 ## Universe 6.0 Preview · Katalog lädt zuverlässig auf dem iPhone
 - Der Katalog-Cache liegt jetzt in IndexedDB. Safari begrenzt `localStorage` auf etwa 5 MB, die beiden Kataloge (je rund 3,8 MB) passten dort nicht hinein; ohne Cache blieb die Bibliothek bei schwachem Netz leer.
 - Ein vorhandener alter Cache in `localStorage` wird weiter genutzt und beim nächsten erfolgreichen Laden nach IndexedDB verschoben; danach wird der Platz in `localStorage` frei.
