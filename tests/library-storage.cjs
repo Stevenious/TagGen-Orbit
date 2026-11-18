@@ -90,6 +90,34 @@ async function indexedDbJourney(url) {
     info = await lib(page);
     assert.equal(info.collections.find(c => c.id === second).count, 1);
 
+    // 3c. Library-wide reading: a tag UID in another collection is found and opened there.
+    const raw = 'Filetype: Flipper NFC device\nVersion: 4\nDevice type: ISO15693-3\nUID: E0 04 03 11 22 33 44 55\nBlock Count: 2\nBlock Size: 04\nData Content: 01 02 03 04 05 06 07 08\n';
+    await page.evaluate(([id, dump]) => { window.orbitCollection.switchTo(id); const v = window.orbitCollection.snapshot(); v.items[0].tag = { uid: 'E0 04 03 11 22 33 44 55', dumpName: 'Tag.nfc', dumpText: dump }; v.items[0].universe.world = 'Musik'; window.orbitCollection.load(v); }, [second, raw]);
+    await page.evaluate(() => window.orbitCollection.switchTo(window.orbitCollection.library().collections[0].id));
+    const hit = await page.evaluate(dump => window.orbitCollection.lookupUid('E0 04 03 11 22 33 44 55', Core.dumpParse(dump)), raw);
+    assert.equal(hit.status, 'exact');
+    assert.equal(hit.collectionId, second);
+    assert.equal(hit.otherCollection, true);
+    assert.equal(hit.collectionName, 'Weihnachten');
+    // A world spans all collections; the card opens its own collection.
+    await page.evaluate(() => { const b = [...document.querySelectorAll('#universe-collection-filter button')].find(x => x.dataset.world === 'Musik'); b.click(); });
+    assert.equal(await page.locator('#universe-collection-cards .universe-card').count(), 1);
+    assert.match(await page.locator('#universe-collection-cards .universe-card').first().textContent(), /in „Weihnachten“/);
+    assert.match(await page.locator('#universe-collection-status').textContent(), /Welt „Musik“ aus 1 Sammlung/);
+    await page.locator('#universe-collection-cards .universe-card').first().click();
+    await page.waitForFunction(id => window.orbitCollection.library().active === id && state.view === 'passport', second);
+    // Printed confirmation also reaches entries outside the active collection.
+    await page.evaluate(() => window.orbitCollection.switchTo(window.orbitCollection.library().collections[0].id));
+    const printedId = (await page.evaluate(id => window.orbitCollection.entries().find(x => x.collectionId === id).entryId, second));
+    assert.equal(await page.evaluate(id => window.orbitCollection.setMetadata(id, { printed: true }), printedId), true);
+    assert(await page.evaluate(id => Boolean(window.orbitCollection.entries().find(x => x.entryId === id).universe.printedAt), printedId));
+    // Reading the known tag opens the entry in its collection.
+    assert.equal(await page.evaluate(dump => window.orbitCollection.openReadByUid('E0 04 03 11 22 33 44 55', dump, 'Tag.nfc'), raw), true);
+    assert.equal((await lib(page)).active, second);
+    await page.locator('.main-nav [data-view="collection"]').click();
+    await page.evaluate(() => { const b = [...document.querySelectorAll('#universe-collection-filter button')].find(x => x.dataset.world === ''); b.click(); });
+    await page.evaluate(() => window.orbitCollection.switchTo(window.orbitCollection.library().collections[0].id));
+
     // 4. Everything survives a reload, including the active collection.
     await flush(page);
     await page.reload({ waitUntil: 'networkidle' });
@@ -187,6 +215,6 @@ async function fallbackJourney(url) {
   try {
     await indexedDbJourney(url);
     await fallbackJourney(url);
-    console.log('Library & storage: migration, IndexedDB, switch, move, reload, backup reminder, export/import, delete, full collection, older-version data, orphan recovery, second-tab warning and localStorage fallback passed');
+    console.log('Library & storage: migration, IndexedDB, switch, move, reload, backup reminder, export/import, delete, full collection, older-version data, library-wide UID lookup and worlds, orphan recovery, second-tab warning and localStorage fallback passed');
   } finally { server.close(); }
 })().catch(error => { console.error(error); server.close(); process.exit(1); });
