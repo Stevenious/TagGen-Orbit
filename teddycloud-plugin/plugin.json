@@ -1,0 +1,10 @@
+{
+  "pluginName": "TagGen Orbit",
+  "description": "Cover gestalten, Custom Tags organisieren und A4-Druckbögen erstellen. Liest Tags, Custom-Tonies und Katalog aus TeddyCloud – nur lesend.",
+  "author": "Stevenious",
+  "version": "6.0.0-plugin-preview.1",
+  "pluginHomepage": "https://github.com/Stevenious/TagGen-Orbit",
+  "teddyCloudSection": "tonies",
+  "icon": "PrinterOutlined",
+  "standalone": false
+}

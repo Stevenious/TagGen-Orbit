@@ -111,3 +111,7 @@ body[data-mobile-step=editor] .settings-panel .controls{display:flex;flex-direct
 .exchange-options label[hidden]{display:none}
 @media(max-width:600px){.exchange-row{grid-template-columns:22px 48px minmax(0,1fr)}.exchange-thumb{width:48px;height:48px}.exchange-chip{grid-column:3;justify-self:start}}
 @media(prefers-color-scheme:dark){.exchange-conflict .exchange-chip,.exchange-broken .exchange-chip{border-color:#fb923c;color:#fb923c}}
+/* TeddyCloud plugin mode (teddycloud.js) */
+.teddycloud-plugin{padding:16px 18px;border:1px solid var(--rose);border-radius:14px;background:var(--soft)}
+.teddycloud-plugin p{margin:0 0 12px}
+.teddycloud-own-window{display:inline-block;margin-left:12px;color:var(--rose)}

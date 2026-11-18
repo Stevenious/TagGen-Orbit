@@ -5,7 +5,7 @@
 (function () {
 'use strict';
 const MAX_FILE = 60e6, MAX_IMAGE_CHARS = 4e6, MAX_ENTRIES = 500, IMAGE_EDGE = 800;
-const KEY_RE = /^(model:[A-Za-z0-9._-]{1,160}|audio:[A-Za-z0-9._-]{1,100}:[0-9a-fA-F]{40}|local:[0-9a-f]{24})$/;
+const KEY_RE = /^(model:[A-Za-z0-9._-]{1,160}|audio:[A-Za-z0-9._-]{1,100}:[0-9a-fA-F]{40}|local:[0-9a-f]{24}|tag:[0-9a-f]{16})$/;
 const MODEL_RE = /^[A-Za-z0-9._-]{1,160}$/, UID_RE = /^[0-9A-F]{2}( [0-9A-F]{2}){7}$/, RUID_RE = /^[0-9a-f]{16}$/;
 const DATA_RE = /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=\s]+$/;
 const CARRIERS = [['capsule43', '43-mm-Kapsel'], ['customTag', 'Custom Tag'], ['creativeTonie', 'Kreativ-Tonie'], ['customFigure', 'Custom-Figur'], ['unknown', 'Unbekannt']];
@@ -127,6 +127,7 @@ function classify(entries, library) {
     const known = keys.get(e.key), owner = e.nfcUid ? uids.get(e.nfcUid) : null;
     if (e.errors.length) { e.status = 'broken'; e.reason = e.errors.join(' · '); }
     else if (known) { e.status = 'existing'; e.reason = 'schon in „' + known.collectionName + '“'; }
+    else if (owner && e.key.startsWith('tag:')) { e.status = 'existing'; e.reason = 'Tag schon in „' + owner.collectionName + '“ als „' + (owner.content?.title || 'Eintrag') + '“'; }
     else if (owner) { e.status = 'conflict'; e.reason = 'Tag-UID gehört zu „' + (owner.content?.title || 'Eintrag') + '“ in „' + owner.collectionName + '“ – Übernahme ohne Tag'; }
     else { e.status = 'new'; e.reason = e.warnings.join(' · '); }
     e.selected = e.status === 'new';
@@ -200,7 +201,7 @@ function buildPanel() {
   const start = node('button', 'Aus TeddyStudio importieren →', 'quiet universe-section'); start.id = 'exchange-start'; start.type = 'button';
   const anchor = el('universe-start-nfc') || el('view-create').lastElementChild; anchor.after(start);
   const section = node('section', undefined, 'panel universe-section exchange-panel'); section.id = 'exchange-import'; section.hidden = true;
-  section.innerHTML = '<div class="panel-body"><h2>TeddyStudio-Import</h2>'
+  section.innerHTML = '<div class="panel-body"><h2 id="exchange-title">TeddyStudio-Import</h2>'
     + '<p class="universe-lead">Laden, prüfen, übernehmen. Bis zum Übernehmen bleibt deine Bibliothek unverändert.</p>'
     + '<label class="file-label">Dateien auswählen<input id="exchange-files" type="file" multiple accept=".json,application/json,image/png,image/jpeg,image/webp"></label>'
     + '<small class="muted">Entweder eine Austauschdatei (taggen-exchange) · oder das TeddyStudio-Cover-Manifest, optional mit Sammlung.json, zusammen mit den Coverbildern.</small>'
@@ -230,14 +231,16 @@ function presetOptions() {
   select.value = [...select.options].some(o => o.value === 'capsule43') ? 'capsule43' : select.options[0]?.value;
 }
 function reset() { view.result = null; view.filter = 'all'; el('exchange-list').replaceChildren(); el('exchange-status').textContent = ''; el('exchange-filter').hidden = true; el('exchange-options').hidden = true; el('exchange-apply').disabled = true; el('exchange-import').hidden = true; }
-async function load(files) {
-  if (view.busy) return; view.busy = true; el('exchange-status').textContent = 'Dateien werden geprüft …';
+async function load(files) { await present(() => loadFiles(files), 'Dateien werden geprüft …'); }
+/* Shared entry point: any source (files, TeddyCloud plugin) delivers a parsed result for the same preview. */
+async function present(produce, message) {
+  if (view.busy) return; view.busy = true; buildPanel(); el('exchange-import').hidden = false; el('exchange-status').textContent = message || 'Wird geprüft …';
   try {
-    const result = await loadFiles(files);
+    const result = await produce();
     classify(result.entries, api().entries ? api().entries() : []);
     view.result = result; view.filter = 'all'; presetOptions();
     el('exchange-name').value = result.name;
-    render();
+    render(); el('exchange-import').scrollIntoView?.({ behavior: 'smooth', block: 'start' });
   } catch (error) { view.result = null; el('exchange-list').replaceChildren(); el('exchange-options').hidden = true; el('exchange-filter').hidden = true; el('exchange-apply').disabled = true; el('exchange-status').textContent = error.message; }
   finally { view.busy = false; }
 }
@@ -253,7 +256,8 @@ function syncOptions() { el('exchange-name').closest('label').hidden = el('excha
 function render() {
   const result = view.result; if (!result) return;
   const c = counts(result.entries);
-  el('exchange-status').textContent = result.entries.length + ' Einträge aus ' + (result.kind === 'exchange' ? 'der Austauschdatei' : 'dem TeddyStudio-Export')
+  el('exchange-title').textContent = result.kind === 'teddycloud' ? 'Tags aus TeddyCloud' : 'TeddyStudio-Import';
+  el('exchange-status').textContent = result.entries.length + ' Einträge aus ' + (result.kind === 'exchange' ? 'der Austauschdatei' : result.kind === 'teddycloud' ? 'deiner TeddyCloud' : 'dem TeddyStudio-Export')
     + ' · ' + c.new + ' neu · ' + c.existing + ' bereits vorhanden · ' + c.conflict + ' Konflikt · ' + c.broken + ' fehlerhaft' + (result.note ? ' · ' + result.note : '');
   const filter = el('exchange-filter'); filter.replaceChildren(); filter.hidden = false;
   for (const [key, label] of [['all', 'Alle'], ['new', 'Neu'], ['existing', 'Vorhanden'], ['conflict', 'Konflikte'], ['broken', 'Fehlerhaft']]) {
@@ -293,6 +297,6 @@ async function apply() {
   finally { view.busy = false; }
 }
 
-window.OrbitExchange = { parseExchange, parseTeddyStudio, classify, classifyJson, counts, toRow, ruidFromUid, uidFromRuid, loadFiles };
+window.OrbitExchange = { parseExchange, parseTeddyStudio, classify, classifyJson, counts, toRow, ruidFromUid, uidFromRuid, loadFiles, present, blankEntry, shrink };
 if (typeof document !== 'undefined' && document.getElementById) buildPanel();
 })();

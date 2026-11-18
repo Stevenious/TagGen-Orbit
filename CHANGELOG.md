@@ -1,5 +1,12 @@
 # TagGen Universe – Changelog
 
+## Universe 6.0 Preview · TeddyCloud-Plugin (Prototyp)
+- Orbit erkennt, wenn TeddyCloud es als Plugin unter `/plugins/<name>/` ausliefert, und liest dann Tags, Custom-Tonies und Katalog vom selben Server – ausschließlich lesend (feste Liste erlaubter GET-Abrufe).
+- Erstellen → „Tags aus TeddyCloud lesen“ nutzt die vorhandene Import-Vorschau; Schlüssel `tag:<RUID>` im Austauschformat (`minor` 1), Tag-UID im Orbit-Format, Cover aus TeddyCloud.
+- Katalog im Plugin-Modus aus `/api/toniesJson` und den Custom-Tonies statt von GitHub.
+- `teddycloud-plugin/plugin.json`, Bauskript `tools/build-teddycloud-plugin.py` und Anleitung `teddycloud-plugin/README.md`.
+- Auf GitHub Pages ändert sich nichts. Neuer Regressionstest `tests/teddycloud-plugin.cjs` gegen einen nachgebauten TeddyCloud-Server.
+
 ## Universe 6.0 Preview · TeddyStudio-Import (Demonstrator)
 - Neues Austauschformat `taggen-exchange` v1 mit Spezifikation (`exchange/SCHEMA.md`), JSON-Schema und erfundenen Beispieldaten (`tools/make-exchange-examples.py`).
 - Erstellen → „Aus TeddyStudio importieren“: liest eine Austauschdatei oder die heutigen TeddyStudio-Exporte (Cover-Manifest, optional Sammlung.json, dazu die Coverbilder).
