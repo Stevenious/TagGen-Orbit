@@ -31,6 +31,8 @@ jobs:
         run: node recovery-smoke-test.cjs
       - name: Library and storage regression
         run: node tests/library-storage.cjs
+      - name: TeddyStudio import regression
+        run: node tests/exchange-import.cjs
       - name: Universe desktop and mobile journeys
         run: node universe-browser-test.cjs
       - name: Screenshots

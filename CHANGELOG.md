@@ -1,5 +1,14 @@
 # TagGen Universe – Changelog
 
+## Universe 6.0 Preview · TeddyStudio-Import (Demonstrator)
+- Neues Austauschformat `taggen-exchange` v1 mit Spezifikation (`exchange/SCHEMA.md`), JSON-Schema und erfundenen Beispieldaten (`tools/make-exchange-examples.py`).
+- Erstellen → „Aus TeddyStudio importieren“: liest eine Austauschdatei oder die heutigen TeddyStudio-Exporte (Cover-Manifest, optional Sammlung.json, dazu die Coverbilder).
+- Vorschau mit Status je Eintrag (neu, bereits vorhanden, Konflikt, fehlerhaft) und Begründung; erst „Übernehmen“ verändert die Bibliothek.
+- Mehr als 12 Einträge werden auf mehrere Sammlungen verteilt; alternativ Import in eine Sammlung mit freien Plätzen.
+- Übernommen werden Titel, Serie, Cover, TeddyCloud-Modell, Audio-ID und Tag-UID (RUID wird geprüft); keine Pfade, kein Audio, keine Dumps.
+- Mehrdeutige Bildnamen (z. B. mehrere `cover.jpg`) werden nicht geraten. Große Cover werden auf 800 px verkleinert.
+- Neuer Regressionstest `tests/exchange-import.cjs`; `exchange.js` ist Teil der Offline-Hülle.
+
 ## Universe 6.0 Preview · Suche über alle Sammlungen
 - Ein gelesener Tag (Flipper-Datei oder BLE-Reader) wird in allen Sammlungen gesucht und in seiner Sammlung geöffnet; die Prüfanzeige nennt die Sammlung.
 - Welten zeigen Tags aus der ganzen Bibliothek, Karten nennen ihre Sammlung und öffnen sie beim Antippen.
