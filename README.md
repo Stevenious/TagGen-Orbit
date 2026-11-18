@@ -139,6 +139,8 @@ Orbit uses or optionally consults external community resources. They remain main
 - [TeddyCloud](https://github.com/toniebox-reverse-engineering/teddycloud) · custom-tag workflow reference and the read-only plugin mode
 - [TeddyStudio](https://github.com/DKT81/TeddyStudio) · Orbit reads its cover-manifest and collection exports
 - [QR Code Generator by Kazuhiko Arase](https://github.com/kazuhikoarase/qrcode-generator) · embedded QR implementation (MIT)
+- [Color Thief by Lokesh Dhakar](https://github.com/lokesh/color-thief) · colours from the motif in the cover studio (MIT, `vendor/`)
+- [smartcrop.js by Jonas Wagner](https://github.com/jwagner/smartcrop.js) · crop suggestion in the cover studio (MIT, `vendor/`)
 
 Some external repositories do not declare a licence in their root. Public availability does not automatically grant permission to redistribute their data, images or dumps. More detail: [Credits, sources and rights](CREDITS_AND_RIGHTS.md).
 

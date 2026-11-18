@@ -115,3 +115,8 @@ body[data-mobile-step=editor] .settings-panel .controls{display:flex;flex-direct
 .teddycloud-plugin{padding:16px 18px;border:1px solid var(--rose);border-radius:14px;background:var(--soft)}
 .teddycloud-plugin p{margin:0 0 12px}
 .teddycloud-own-window{display:inline-block;margin-left:12px;color:var(--rose)}
+/* Cover assist (cover-assist.js) */
+.cover-assist{display:grid;gap:8px;margin-top:12px}
+.cover-assist .row{display:flex;flex-wrap:wrap;gap:8px}
+.cover-assist [data-ready="false"]{opacity:.55}
+.cover-assist small{color:var(--muted)}
