@@ -33,6 +33,8 @@ jobs:
         run: node tests/library-storage.cjs
       - name: TeddyStudio import regression
         run: node tests/exchange-import.cjs
+      - name: Catalog loading and cache regression
+        run: node tests/catalog-cache.cjs
       - name: Universe desktop and mobile journeys
         run: node universe-browser-test.cjs
       - name: Screenshots
