@@ -1,5 +1,15 @@
 # TagGen Universe – Changelog
 
+## Universe 6.0 Preview · Bibliothek & sicherer Speicher
+- Beliebig viele Sammlungen (je ein A4-Bogen mit bis zu 12 Einträgen) mit Umschalter, „Neue Sammlung“ ohne Datenverlust und „Sammlung löschen“ mit Rückfrage.
+- Einträge lassen sich in der Tag-Karte und in der Sammlungsliste in eine andere Sammlung verschieben.
+- Speicherung in IndexedDB statt nur `localStorage`; die aktive Sammlung bleibt zusätzlich im bisherigen Schlüssel, damit ältere Versionen sie weiter lesen können.
+- Automatische Übernahme der bisherigen Sammlung; Änderungen aus einer älteren Orbit-Version werden als eigene Sammlung erhalten.
+- Der Browser wird um dauerhaften Speicher gebeten (`navigator.storage.persist`), sobald die erste Sammlung Einträge hat.
+- Sicherungshinweis bei nie gesicherten Sammlungen oder Änderungen nach über 14 Tagen; neue Sicherung „Alle Sammlungen sichern“ (`.orbit-library`) samt Import als zusätzliche Sammlungen.
+- Ohne IndexedDB (z. B. eingeschränkte Browser) weiter mit `localStorage`, inklusive mehrerer Sammlungen.
+- Neuer Regressionstest `tests/library-storage.cjs`.
+
 ## Universe 6.0 Preview · robuster Start und Offline-Hülle
 - Startseite bleibt auch ohne Universe-JavaScript sichtbar; direkter Zugang zum Cover-Studio.
 - Shell-Cache `taggen-universe-shell-6-0-0` enthält beide Universe-Dateien.
