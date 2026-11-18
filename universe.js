@@ -70,6 +70,8 @@ function passport(){
  const worldLabel=node('label','Deine Welt'),world=node('select');addOptions(world,[['','Noch nicht zugeordnet'],...worlds.map(x=>[x,x])]);world.value=item.universe?.world||'';world.onchange=()=>api().setMetadata(item.entryId,{world:world.value});worldLabel.append(world);physical.append(worldLabel);
  const carrierLabel=node('label','Physischer Träger'),carrier=node('select');addOptions(carrier,[['unknown','Unbekannt'],['capsule43','43-mm-Kapsel'],['customTag','Custom Tag'],['creativeTonie','Kreativ-Tonie'],['originalTonie','Original-Tonie'],['customFigure','Custom-Figur']]);carrier.value=item.physical.type;carrier.onchange=()=>api().setMetadata(item.entryId,{carrier:carrier.value});carrierLabel.append(carrier);physical.append(carrierLabel);
  physical.append(node('p',formatName(item.physical.preset),'muted'));
+ const libraryInfo=api().library?.(),others=libraryInfo?.ready?libraryInfo.collections.filter(x=>x.id!==libraryInfo.active):[];
+ if(others.length){const moveLabel=node('label','In andere Sammlung verschieben'),move=node('select');move.id='universe-passport-move';addOptions(move,[['','Bleibt in dieser Sammlung'],...others.map(x=>[x.id,x.name+' · '+x.count+' / 12'])]);for(const option of move.options)option.disabled=option.value!==''&&others.find(x=>x.id===option.value).count>=12;move.onchange=()=>{const target=move.value;if(!target)return;if(api().moveEntry(item.entryId,target))go('collection');else move.value='';};moveLabel.append(move);physical.append(moveLabel);}
  const technical=node('details'),summary=node('summary','Technische Angaben'),technicalList=node('dl');
  for(const [key,value] of [['UID',item.tag.uid||'Unbekannt'],['Audio-ID',d?.audioId||'Nicht angegeben'],['NFC-Datei',item.tag.dumpName||'Keine']])technicalList.append(node('dt',key),node('dd',value));
  technical.append(summary,technicalList,button('Werkstatt öffnen →',()=>{api().openEntry(item.entryId);go('workshop');}));physical.append(technical);right.append(physical);
@@ -138,10 +140,10 @@ const filters=node('div',undefined,'universe-filter');filters.id='universe-colle
 for(const world of ['',...worlds]){const b=button(world||'Alle',()=>{view.world=world;refreshCollection();});b.dataset.world=world;b.setAttribute('aria-pressed',String(!world));filters.append(b);}
 const collectionStatus=node('p',undefined,'status');collectionStatus.id='universe-collection-status';collectionStatus.setAttribute('role','status');
 const collectionCards=node('div',undefined,'universe-cards');collectionCards.id='universe-collection-cards';
-heading.after(filters,collectionStatus,el('collection-storage'),collectionCards);
+heading.after(el('collection-switcher'),el('collection-backup-hint'),filters,collectionStatus,el('collection-storage'),collectionCards);
 const batchActions=node('div',undefined,'universe-batch-actions');
 const pendingPrint=button('Ungedruckte Cover ergänzen →',()=>api().printPending(),'primary');pendingPrint.id='universe-print-pending';
-batchActions.append(pendingPrint,button('Sammlung sichern',()=>el('collection-export').click()));
+batchActions.append(pendingPrint,button('Sammlung sichern',()=>el('collection-export').click()),button('Alle Sammlungen sichern',()=>el('library-export').click()));
 collectionCards.after(batchActions);
 const manage=node('details',undefined,'universe-collection-tools');manage.append(node('summary','Sammlung verwalten · Name, Import & Sicherung'),document.querySelector('.collection-layout>.panel:first-child .panel-body'));document.querySelector('.collection-layout').before(manage);
 document.querySelector('.collection-flow').hidden=true;

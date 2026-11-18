@@ -7,7 +7,7 @@ permissions:
   contents: read
 jobs:
   regression:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -26,6 +26,8 @@ jobs:
         run: node flow-integrity-test.cjs
       - name: Existing image and print regression
         run: node recovery-smoke-test.cjs
+      - name: Library and storage regression
+        run: node tests/library-storage.cjs
       - name: Universe desktop and mobile journeys
         run: node universe-browser-test.cjs
       - name: Screenshots
