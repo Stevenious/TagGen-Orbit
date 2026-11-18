@@ -10,17 +10,25 @@ TagGen Orbit is a browser-based tool for creating custom cover artwork, organisi
 
 ## What you can do
 
+_The screenshots show the app's German interface with invented demo content (titles, covers and tag UIDs)._
+
 ### Create and customise covers
 - Find catalogue entries and use their available cover artwork as a starting point.
 - Create designs from your own images, including batches of up to 12 PNG, JPEG or WebP files.
 - Edit round or square designs, adjust the layout and optionally add a reverse side.
 - Ambiguous filename matches are suggestions only; uncertain matches require confirmation.
 
+![Cover studio: round 43 mm cover preview with series and title text on the left, format, title, series, own image and layout options on the right](assets/screenshots/orbit-cover-studio.png)
+
 ### Organise your physical tags
 - Keep multiple named collections. Each collection has up to 12 working positions.
 - Keep **content metadata**, **audio ID**, **NFC tag UID** and **physical carrier/format** as separate pieces of information.
 - Add, replace, check and move entries without silently changing unrelated cover or tag data.
 - Use the Tag Pass to see what is known, what is linked and what still needs attention.
+
+![Collection view: collection switcher, world filters, print status and a grid of cover cards](assets/screenshots/orbit-collection-tagpass.png)
+
+![Tag Pass for a single entry: status of content, cover, print sheet and NFC UID, plus world, physical carrier and collection](assets/screenshots/orbit-tag-pass.png)
 
 ### Prepare print sheets
 - Arrange covers on A4 sheets and use the browser print dialog to print or save as PDF.
@@ -31,6 +39,8 @@ TagGen Orbit is a browser-based tool for creating custom cover artwork, organisi
   - Free round formats: 25 mm, 30 mm and 40 mm
 - Optional reverse sides support QR information and tag details.
 - Printer calibration and duplex settings are available where supported.
+
+![Print studio: A4 sheet for 43 mm coin capsules with 12 occupied positions and the paper and output settings](assets/screenshots/orbit-print-studio.png)
 
 **Printing tip:** Start with a test sheet on ordinary paper. Use 100% / actual size and check the printer's scaling, margins and duplex flip edge before using label stock. Actual alignment depends on the printer and driver.
 
