@@ -21,7 +21,7 @@ async function lifecycle(name){let task;handlers[name]({waitUntil(p){task=p;}});
  await lifecycle('install');
  const shell=storage.get('taggen-universe-shell-6-0-0');
  assert(shell,'New shell cache installed');
- for(const file of ['','index.html','universe.css','universe.js','exchange.js','manifest.webmanifest','assets/orbit-icon-192.png','assets/orbit-icon-512.png'])assert(shell.has(root+file),file+' cached');
+ for(const file of ['','index.html','universe.css','universe.js','exchange.js','teddycloud.js','manifest.webmanifest','assets/orbit-icon-192.png','assets/orbit-icon-512.png'])assert(shell.has(root+file),file+' cached');
  await lifecycle('activate');assert(claimed);
  assert.deepEqual([...storage.keys()].sort(),['taggen-universe-shell-6-0-0','unrelated-app']);
  offline=true;

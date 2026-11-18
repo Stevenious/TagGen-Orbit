@@ -39,6 +39,7 @@ Eine einzelne JSON-Datei, mit der TeddyStudio und TagGen Orbit Hörspiel-Metadat
    - `model:<Modellkennung>` – TeddyCloud-Modell (z. B. `mondbaer-001`), sobald es existiert
    - `audio:<Audio-ID>:<SHA1-Hash>` – wenn es nur die Audiodatei gibt
    - `local:<TeddyStudio-ID>` – 24 Hex, nur auf dem exportierenden Rechner stabil
+   - `tag:<RUID>` – ein physischer Tag, wie ihn TeddyCloud kennt (16 Hex klein; seit `minor` 1, genutzt vom TeddyCloud-Plugin)
 
    Ein `key` darf in einer Datei nur einmal vorkommen.
 3. **Bilder** stehen einmal unter `images` als Data-URL (PNG, JPEG oder WebP, empfohlen ≤ 800 px und ≤ 1 MB) und werden über `cover.imageRef` referenziert. Keine Dateipfade, keine fremd gehosteten URLs.
