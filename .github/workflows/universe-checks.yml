@@ -16,7 +16,10 @@ jobs:
           node-version: '22'
       - name: Install test dependencies
         run: npm install --no-save playwright@1.58.2 @napi-rs/canvas@0.1.80
+      - name: Make apt downloads retry instead of hanging
+        run: printf 'Acquire::Retries "5";\nAcquire::http::Timeout "30";\nAcquire::https::Timeout "30";\n' | sudo tee /etc/apt/apt.conf.d/80-ci-retries
       - name: Install desktop and Safari engine browsers
+        timeout-minutes: 8
         run: npx playwright install --with-deps chromium webkit
       - name: Validate uploaded patch compatibility
         run: python3 universe-patch-test.py
