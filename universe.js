@@ -23,31 +23,34 @@ function startSearch(query='',keepEntry=false){
 function startOwn(){
  api().clearEditing();view.editorFormatChanged=false;go('studio');el('custom').click();step('editor');
 }
-function openPassport(id){view.passportId=id;go('passport');}
+const libraryItems=()=>api().entries?api().entries():snapshot().items.map(x=>({...x,inActive:true}));
+function openPassport(id,collectionId){if(collectionId&&api().ensureActive&&!api().ensureActive(collectionId))return;view.passportId=id;go('passport');}
 function cardStatus(item){return !item.content?.design?'Cover noch offen':!item.confirmed?'Vorschlag prüfen':item.universe?.printedAt?'Druck bestätigt':'Cover bereit';}
 function renderEntryCards(target,items){
  target.replaceChildren();const generation=++view.cardGeneration;
  if(!items.length){const empty=node('div',undefined,'universe-empty');empty.append(node('strong',view.world?'In dieser Welt ist noch kein Tag.':'Deine Sammlung beginnt mit einem Cover.'),node('span','Suche eine Geschichte oder starte mit deinem eigenen Bild.'),button('＋ Erstellen',()=>go('create'),'primary'));target.append(empty);return;}
- for(const item of items){const b=button('',()=>openPassport(item.entryId),'universe-card');const art=node('div',undefined,'universe-art');art.append(node('span','◌'));const copy=node('span',undefined,'universe-card-copy');copy.append(node('strong',item.content.title||'Ohne Titel'),node('small',[item.content.series,cardStatus(item)].filter(Boolean).join(' · ')));b.append(art,copy);target.append(b);const d=item.content.design;if(d)coverCanvas(d,360).then(c=>{if(!b.isConnected)return;art.replaceChildren(c);}).catch(()=>{art.replaceChildren(node('span','◌'));});}
+ for(const item of items){const b=button('',()=>openPassport(item.entryId,item.collectionId),'universe-card');const art=node('div',undefined,'universe-art');art.append(node('span','◌'));const copy=node('span',undefined,'universe-card-copy');copy.append(node('strong',item.content.title||'Ohne Titel'),node('small',[item.content.series,cardStatus(item),item.inActive===false?'in „'+item.collectionName+'“':''].filter(Boolean).join(' · ')));b.append(art,copy);target.append(b);const d=item.content.design;if(d)coverCanvas(d,360).then(c=>{if(!b.isConnected)return;art.replaceChildren(c);}).catch(()=>{art.replaceChildren(node('span','◌'));});}
 }
 function refreshHome(){
- const s=snapshot(),items=s.items;
- renderEntryCards(el('universe-home-cards'),items.slice(-4).reverse());
+ const s=snapshot(),items=libraryItems();
+ renderEntryCards(el('universe-home-cards'),s.items.slice(-4).reverse());
  const worldRoot=el('universe-worlds');worldRoot.replaceChildren();
  for(const world of worlds){const count=items.filter(x=>x.universe?.world===world).length;const b=button('',()=>{view.world=world;go('collection');});b.append(node('strong',world),node('small',count+' Tags'));worldRoot.append(b);}
  const next=el('universe-next');next.replaceChildren();
  const queued=state.slots.filter(Boolean).length;
  if(queued){const row=node('div',undefined,'row between');row.append(node('span',queued+' Cover auf dem Druckbogen'),button('Druckbogen öffnen →',()=>go('print')));next.append(row);}
  const unfinished=items.filter(x=>!x.content.design||!x.confirmed||!x.universe?.printedAt);
- for(const item of unfinished.slice(0,3)){const row=node('div',undefined,'row between');row.append(node('span',(item.content.title||'Ohne Titel')+' · '+(!item.content.design?'Cover wählen':!item.confirmed?'Zuordnung prüfen':'Druck noch offen')),button('Weiter →',()=>openPassport(item.entryId)));next.append(row);}
+ for(const item of unfinished.slice(0,3)){const row=node('div',undefined,'row between');row.append(node('span',(item.content.title||'Ohne Titel')+(item.inActive===false?' („'+item.collectionName+'“)':'')+' · '+(!item.content.design?'Cover wählen':!item.confirmed?'Zuordnung prüfen':'Druck noch offen')),button('Weiter →',()=>openPassport(item.entryId,item.collectionId)));next.append(row);}
  if(!next.children.length)next.append(node('div',items.length?'Alles erledigt. Zeit für deine nächste Geschichte.':'Erstelle deinen ersten Tag — die Werkstatt brauchst du dafür nicht.'));
 }
 function refreshCollection(){
- const s=snapshot(),filtered=s.items.filter(x=>!view.world||x.universe?.world===view.world);
+ // A world is a view across the whole library; without a world the active collection is shown.
+ const s=snapshot(),filtered=view.world?libraryItems().filter(x=>x.universe?.world===view.world):s.items;
  renderEntryCards(el('universe-collection-cards'),filtered);
  const queued=new Set(state.slots.filter(Boolean).map(d=>d.collectionId));
  const pending=s.items.filter(x=>x.content.design&&x.confirmed&&!x.universe?.printedAt&&!queued.has(x.entryId)).length;
- el('universe-collection-status').textContent=s.items.length+' / 12 Tags in „'+s.name+'“'+(view.world?' · '+view.world:'')+' · '+pending+' bereit für den nächsten Druck';
+ if(view.world){const sources=new Set(filtered.map(x=>x.collectionId)).size;el('universe-collection-status').textContent=filtered.length+' Tags in der Welt „'+view.world+'“ aus '+(sources===1?'1 Sammlung':sources+' Sammlungen')+' · '+pending+' in „'+s.name+'“ bereit für den nächsten Druck';}
+ else el('universe-collection-status').textContent=s.items.length+' / 12 Tags in „'+s.name+'“ · '+pending+' bereit für den nächsten Druck';
  el('universe-print-pending').disabled=!pending;
  el('universe-collection-filter').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.world===view.world)));
 }
