@@ -1,5 +1,11 @@
 # TagGen Universe – Changelog
 
+## Universe 6.0 Preview · Suche über alle Sammlungen
+- Ein gelesener Tag (Flipper-Datei oder BLE-Reader) wird in allen Sammlungen gesucht und in seiner Sammlung geöffnet; die Prüfanzeige nennt die Sammlung.
+- Welten zeigen Tags aus der ganzen Bibliothek, Karten nennen ihre Sammlung und öffnen sie beim Antippen.
+- Startseite: Welten-Zähler und „Als Nächstes“ über alle Sammlungen.
+- „Gedruckte Tags bestätigen“ erreicht auch Einträge aus anderen Sammlungen.
+
 ## Universe 6.0 Preview · Bibliothek & sicherer Speicher
 - Beliebig viele Sammlungen (je ein A4-Bogen mit bis zu 12 Einträgen) mit Umschalter, „Neue Sammlung“ ohne Datenverlust und „Sammlung löschen“ mit Rückfrage.
 - Einträge lassen sich in der Tag-Karte und in der Sammlungsliste in eine andere Sammlung verschieben.
