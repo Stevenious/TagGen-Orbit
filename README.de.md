@@ -10,17 +10,25 @@ TagGen Orbit ist ein browserbasiertes Werkzeug für individuelle Cover, die Orga
 
 ## Was du mit Orbit machen kannst
 
+_Die Screenshots zeigen die Anwendung mit erfundenen Demodaten (Titel, Cover und Tag-UIDs)._
+
 ### Cover gestalten
 - Katalogeinträge suchen und vorhandene Coverbilder als Ausgangspunkt verwenden.
 - Eigene Bilder nutzen – einzeln oder als Stapel mit bis zu 12 PNG-, JPEG- oder WebP-Dateien.
 - Runde oder quadratische Designs bearbeiten, Layouts anpassen und optional eine Rückseite gestalten.
 - Unsichere Dateinamen-Zuordnungen werden nur als Vorschlag angezeigt und müssen bestätigt werden.
 
+![Cover-Studio: runde 43-mm-Covervorschau mit Serie und Titel links, rechts Format, Titel, Serie, eigenes Bild und Layout](assets/screenshots/orbit-cover-studio.png)
+
 ### Physische Tags organisieren
 - Mehrere benannte Sammlungen verwalten. Jede Sammlung hat bis zu 12 Arbeitsplätze.
 - **Inhaltsmetadaten**, **Audio-ID**, **NFC-Tag-UID** und **physischer Träger bzw. Format** bleiben getrennte Angaben.
 - Einträge ergänzen, austauschen, prüfen und verschieben, ohne unbeteiligte Cover- oder Tag-Daten stillschweigend zu verändern.
 - Der Tag-Pass zeigt, was bekannt und zugeordnet ist und wo noch Angaben fehlen.
+
+![Sammlungsansicht: Sammlungsauswahl, Welten-Filter, Druckstatus und Coverkarten](assets/screenshots/orbit-collection-tagpass.png)
+
+![Tag-Pass eines Eintrags: Stand von Inhalt, Cover, Druckbogen und NFC-UID sowie Welt, physischer Träger und Sammlung](assets/screenshots/orbit-tag-pass.png)
 
 ### Druckbögen vorbereiten
 - Cover auf A4-Druckbögen anordnen und über den Druckdialog des Browsers drucken oder als PDF speichern.
@@ -31,6 +39,8 @@ TagGen Orbit ist ein browserbasiertes Werkzeug für individuelle Cover, die Orga
   - Freie runde Formate: 25 mm, 30 mm und 40 mm
 - Optionale Rückseiten können QR-Informationen und Tag-Angaben enthalten.
 - Druckerkalibrierung und Duplex-Einstellungen sind – soweit unterstützt – vorhanden.
+
+![Druck-Studio: A4-Bogen für 43-mm-Münzkapseln mit 12 belegten Plätzen sowie Papier- und Ausgabeeinstellungen](assets/screenshots/orbit-print-studio.png)
 
 **Drucktipp:** Zuerst einen Probedruck auf normalem Papier machen. Im Druckdialog 100 % / tatsächliche Größe wählen und Skalierung, Ränder sowie Wendekante prüfen, bevor Etikettenpapier verwendet wird. Die tatsächliche Passung hängt von Drucker und Treiber ab.
 
