@@ -6,6 +6,8 @@
 
 TagGen Orbit is a browser-based tool for creating custom cover artwork, organising physical custom tags and preparing A4 print sheets. It brings the cover studio, collection workflow, print layouts and read-only NFC tools together in one app.
 
+Orbit works on its own in any browser. If you use [TeddyCloud](#teddycloud-from-file-exchange-to-a-read-only-plugin), it can take over titles, covers and tag UIDs from a file or – as a read-only plugin – directly from your TeddyCloud.
+
 > **Project status:** Universe 6.0 Preview. The app is usable, but hardware compatibility, printer alignment and some device-specific workflows still require real-world testing. Feedback is welcome.
 
 ## What you can do
@@ -24,6 +26,7 @@ _The screenshots show the app's German interface with invented demo content (tit
 - Keep multiple named collections. Each collection has up to 12 working positions.
 - Keep **content metadata**, **audio ID**, **NFC tag UID** and **physical carrier/format** as separate pieces of information.
 - Add, replace, check and move entries without silently changing unrelated cover or tag data.
+- Import entries from a `taggen-exchange` file, TeddyStudio exports or – in the TeddyCloud plugin – your TeddyCloud tags. Nothing changes until you confirm the preview.
 - Use the Tag Pass to see what is known, what is linked and what still needs attention.
 
 ![Collection view: collection switcher, world filters, print status and a grid of cover cards](assets/screenshots/orbit-collection-tagpass.png)
@@ -52,11 +55,35 @@ _The screenshots show the app's German interface with invented demo content (tit
 
 **Read-only by design:** Orbit does not write to NFC tags, change UIDs, unlock protected memory or manage tag passwords. A detected UID or matching dump does not prove the audio content or the authenticity of a tag.
 
-## TeddyCloud: works alongside it, not synced
+## TeddyCloud: from file exchange to a read-only plugin
 
-Orbit can help prepare the cover and document which physical tag belongs to an entry. You can then assign the content and image to that custom tag in your own TeddyCloud installation.
+Orbit takes care of the physical side – covers, tags and print sheets. [TeddyCloud](https://github.com/toniebox-reverse-engineering/teddycloud) remains responsible for content and playback. You can combine them in three steps. Each step is optional, and in none of them does Orbit change TeddyCloud's configuration.
 
-There is **no direct TeddyCloud synchronisation or API connection**. Orbit is a static GitHub Pages app and does not receive your TeddyCloud credentials. The physical cover, an Orbit project file or a printed QR code does not automatically change TeddyCloud's configuration.
+| Step | How it works | What Orbit receives |
+| --- | --- | --- |
+| 1 · Separate | Prepare the cover and document the tag in Orbit, then assign content and image in TeddyCloud's own interface. | Nothing – no connection. |
+| 2 · File exchange | **Create → “Aus TeddyStudio importieren”** reads a [`taggen-exchange`](exchange/SCHEMA.md) file or today's TeddyStudio exports (cover manifest, collection, images). | Titles, series, covers, TeddyCloud model, audio ID and tag UID – from a file you choose. |
+| 3 · TeddyCloud plugin (preview) | Install Orbit in TeddyCloud's plugin folder and use **Create → “Tags aus TeddyCloud lesen”**. | Your tags, custom tonies and catalogue – read directly from your own TeddyCloud. |
+
+Every import starts with a preview (new, already present, conflict, faulty). Your library only changes when you confirm it.
+
+### The hosted app (GitHub Pages)
+The app on GitHub Pages has **no connection to TeddyCloud**. It cannot reach a private home server and never receives TeddyCloud credentials. A printed cover, an Orbit project file or a QR code does not change TeddyCloud's configuration.
+
+### Orbit as a TeddyCloud plugin (preview)
+TeddyCloud can show web plugins from its plugin folder. Served from there, Orbit runs on the same address as TeddyCloud and reads:
+- your tags with UID/RUID, assigned model and cover,
+- your custom tonies and TeddyCloud's catalogue – so the catalogue also works without GitHub or internet access.
+
+**Read-only by design.** Orbit uses a fixed list of four read requests (`getTagIndex`, `toniesJson`, `toniesCustomJson`, `auth/status`) plus images from TeddyCloud's static folders. Any other request is refused before it is sent. Orbit does not change tag assignments, audio files or settings and does not write NFC tags. TeddyCloud handles the login with its own session cookie; Orbit never sees a password or token.
+
+Things to know:
+- **Preview:** tested against a simulated TeddyCloud built from the source code of TeddyCloud `tc_v0.7.1`; a broad test on real installations is still pending.
+- A TeddyCloud plugin runs with the permissions of the signed-in user. Install only packages from a source you trust.
+- Under your TeddyCloud's address Orbit uses separate browser storage. Move collections with **“Alle Sammlungen sichern”** and **“Sammlung oder Bibliothek laden”**.
+- If TeddyCloud is served over plain `http`, browsers do not allow Web Bluetooth (NFC reader) or offline start. NFC files, covers, collections and printing still work.
+
+Installation and details: [teddycloud-plugin/README.md](teddycloud-plugin/README.md) (German).
 
 Useful external documentation:
 - [TeddyCloud custom tags guide](https://tonies-wiki.revvox.de/docs/tools/teddycloud/usage/custom-tags/)
@@ -73,6 +100,9 @@ Useful external documentation:
 
 No account or installation is required for normal use.
 
+### Use it inside TeddyCloud (preview)
+Build the plugin package with `python3 tools/build-teddycloud-plugin.py` and unpack it into TeddyCloud's plugin folder. Orbit then appears under **Tonies**. See [teddycloud-plugin/README.md](teddycloud-plugin/README.md).
+
 ### Install it as an app
 On supported browsers, use the browser's **Install app** option. On iPhone/iPad, use **Share → Add to Home Screen** in Safari. The app shell can be cached for offline startup after it has been loaded successfully online.
 
@@ -85,7 +115,7 @@ The project is a static site. Serve the repository root over HTTP, for example:
 
 Then open [http://localhost:8000](http://localhost:8000).
 
-For GitHub Pages, publish the application files together: index.html, universe.js, universe.css, sw.js, manifest.webmanifest and the assets/ directory.
+For GitHub Pages, publish the application files together: index.html, universe.js, universe.css, exchange.js, teddycloud.js, sw.js, manifest.webmanifest and the assets/ directory.
 
 ## Your data and privacy
 
@@ -95,6 +125,7 @@ For GitHub Pages, publish the application files together: index.html, universe.j
 - A private .taggen project can preserve your working project. Collection and library exports use .orbit-collection and .orbit-library.
 - The **public cover pack** removes audio IDs and NFC data. Only share images you have permission to redistribute.
 - The offline service worker caches the app shell, not private projects, NFC dumps, remote catalogue data or externally hosted cover images.
+- As a TeddyCloud plugin, Orbit stores its data in the browser under your TeddyCloud's address and only reads from that server; it sends nothing to TeddyCloud.
 - Visiting GitHub Pages and requesting external catalogues, community indexes or remote images sends requests to those providers. See [CREDITS_AND_RIGHTS.md](CREDITS_AND_RIGHTS.md) for data-flow and rights notes.
 
 ## Catalogue, community data and acknowledgements
@@ -105,7 +136,8 @@ Orbit uses or optionally consults external community resources. They remain main
 - [flipper-zero-tonies](https://github.com/nortakales/flipper-zero-tonies) · optional community NFC dump search
 - [L480/tonies](https://github.com/L480/tonies) · optional UID index
 - [NFC-Archiver](https://github.com/RFIDfriend/NFC-Archiver) · reader and BLE protocol documentation
-- [TeddyCloud](https://github.com/toniebox-reverse-engineering/teddycloud) · custom-tag workflow reference
+- [TeddyCloud](https://github.com/toniebox-reverse-engineering/teddycloud) · custom-tag workflow reference and the read-only plugin mode
+- [TeddyStudio](https://github.com/DKT81/TeddyStudio) · Orbit reads its cover-manifest and collection exports
 - [QR Code Generator by Kazuhiko Arase](https://github.com/kazuhikoarase/qrcode-generator) · embedded QR implementation (MIT)
 
 Some external repositories do not declare a licence in their root. Public availability does not automatically grant permission to redistribute their data, images or dumps. More detail: [Credits, sources and rights](CREDITS_AND_RIGHTS.md).
