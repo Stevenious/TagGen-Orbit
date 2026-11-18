@@ -12,6 +12,8 @@ Danke an die Maintainer und Beitragenden der folgenden Projekte. Die Nennung bed
 | [TeddyStudio](https://github.com/DKT81/TeddyStudio) | Orbit liest dessen Exporte (Cover-Manifest, Sammlung) und das von Orbit vorgeschlagene Austauschformat `taggen-exchange` | GPL-3.0 für das externe Repository; kein TeddyStudio-Quelltext übernommen, Austausch nur über Dateien. Lizenz der Formatspezifikation noch abzustimmen. |
 | [SLI-Writer](https://github.com/Julienbxl/SLI-Writer) | Referenz für einen möglichen späteren Schreib-Workflow; aktuell kein Schreibzugriff | Kein `LICENSE` im Repository-Stamm gefunden; kein Code daraus übernommen. |
 | [QR Code Generator](https://github.com/kazuhikoarase/qrcode-generator) von Kazuhiko Arase | QR-Erzeugung im Browser | MIT-lizenzierter Code ist in `index.html` eingebettet, einschließlich Copyright- und Lizenzhinweis. |
+| [Color Thief](https://github.com/lokesh/color-thief) von Lokesh Dhakar | „Farben aus Motiv“ im Cover-Studio | MIT. Unveränderte Browser-Fassung v3.5.0 in `vendor/color-thief.js`, einschließlich Copyright- und Lizenzhinweis. Läuft nur im Browser auf dem gewählten Bild. |
+| [smartcrop.js](https://github.com/jwagner/smartcrop.js) von Jonas Wagner | „Ausschnitt vorschlagen“ im Cover-Studio | MIT. Unveränderte Datei v2.0.5 in `vendor/smartcrop.js`, einschließlich Copyright- und Lizenzhinweis. Läuft nur im Browser auf dem gewählten Bild. |
 
 „Kein `LICENSE` im Repository-Stamm gefunden“ ist eine Momentaufnahme, keine Feststellung über sämtliche Dateien oder Rechteinhaber. Öffentlich zugängliche Daten, Cover und Dumps erhalten dadurch keine pauschale Lizenz zur Weitergabe.
 

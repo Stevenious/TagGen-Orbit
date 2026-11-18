@@ -1,5 +1,12 @@
 # TagGen Universe – Changelog
 
+## Universe 6.0 Preview · Cover-Hilfen im Studio
+- „Farben aus Motiv“ übernimmt Akzent und Hintergrund aus dem Bild ([Color Thief](https://github.com/lokesh/color-thief), MIT). Der Hintergrund bleibt hell genug für den dunklen Titel (Kontrast ≥ 4,5:1), der Akzent hebt sich davon ab (≥ 3:1).
+- „Ausschnitt vorschlagen“ sucht den interessantesten Bildbereich ([smartcrop.js](https://github.com/jwagner/smartcrop.js), MIT) und setzt Motivgröße und Position – für runde und quadratische Cover.
+- Beide Hilfen setzen nur Werte, die auch die Regler einstellen, und lassen sich mit „rückgängig“ zurücknehmen; spätere Handänderungen bleiben dabei erhalten.
+- Die Bibliotheken liegen unverändert in `vendor/`, werden erst beim ersten Klick geladen und funktionieren offline. Bilder, die nur zur Anzeige geladen werden dürfen, werden nicht ausgelesen.
+- Neuer Regressionstest `tests/cover-assist.cjs`.
+
 ## Universe 6.0 Preview · TeddyCloud-Plugin (Prototyp)
 - Orbit erkennt, wenn TeddyCloud es als Plugin unter `/plugins/<name>/` ausliefert, und liest dann Tags, Custom-Tonies und Katalog vom selben Server – ausschließlich lesend (feste Liste erlaubter GET-Abrufe).
 - Erstellen → „Tags aus TeddyCloud lesen“ nutzt die vorhandene Import-Vorschau; Schlüssel `tag:<RUID>` im Austauschformat (`minor` 1), Tag-UID im Orbit-Format, Cover aus TeddyCloud.
