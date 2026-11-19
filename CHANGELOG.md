@@ -6,6 +6,7 @@
 - Audio-ID und Hash bleiben leer: Katalog-IDs echter Tonies würden in TeddyCloud deren Daten überschreiben.
 - Im TeddyCloud-Plugin wird die vorhandene Datei lesend von der TeddyCloud geholt. Orbit schreibt weiterhin nichts in TeddyCloud.
 - Neuer Regressionstest `tests/teddycloud-export.cjs` (ZIP mit Pythons `zipfile` geprüft).
+- Farben: Knöpfe, Auswahl und Akzente wieder im Tonie-Rot (`#da2355`) statt Violett, im dunklen Design ein helles Rot; Links wieder blau. `theme_color` im Manifest angepasst.
 
 ## Universe 6.0 Preview · Cover-Hilfen im Studio
 - „Farben aus Motiv“ übernimmt Akzent und Hintergrund aus dem Bild ([Color Thief](https://github.com/lokesh/color-thief), MIT). Der Hintergrund bleibt hell genug für den dunklen Titel (Kontrast ≥ 4,5:1), der Akzent hebt sich davon ab (≥ 3:1).
