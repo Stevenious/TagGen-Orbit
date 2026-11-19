@@ -8,7 +8,7 @@ permissions:
 jobs:
   regression:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -18,9 +18,32 @@ jobs:
         run: npm install --no-save playwright@1.58.2 @napi-rs/canvas@0.1.80
       - name: Make apt downloads retry instead of hanging
         run: printf 'Acquire::Retries "5";\nAcquire::http::Timeout "30";\nAcquire::https::Timeout "30";\n' | sudo tee /etc/apt/apt.conf.d/80-ci-retries
+      # The browsers (~300 MB) come from the cache after the first green run; only the system
+      # libraries are installed with apt. A hanging download is cut off after 6 minutes and retried.
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-1.58.2-${{ runner.os }}-chromium-webkit
       - name: Install desktop and Safari engine browsers
-        timeout-minutes: 8
-        run: npx playwright install --with-deps chromium webkit
+        timeout-minutes: 22
+        env:
+          DEBIAN_FRONTEND: noninteractive
+          CACHE_HIT: ${{ steps.pw-cache.outputs.cache-hit }}
+        run: |
+          for attempt in 1 2 3; do
+            if [ "$CACHE_HIT" = "true" ]; then
+              timeout 360 npx playwright install-deps chromium webkit && timeout 360 npx playwright install chromium webkit && exit 0
+            else
+              timeout 360 npx playwright install --with-deps chromium webkit && exit 0
+            fi
+            echo "::warning::Browser installation attempt $attempt failed or hung – retrying"
+            sudo pkill -f 'apt-get|dpkg' || true
+            sudo dpkg --configure -a || true
+            sleep 15
+          done
+          exit 1
       - name: Validate uploaded patch compatibility
         run: python3 universe-patch-test.py
       - name: Offline shell regression
