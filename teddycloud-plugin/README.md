@@ -16,6 +16,7 @@ Orbit kann zusätzlich als Plugin in [TeddyCloud](https://github.com/toniebox-re
 - **Erstellen → „Tags aus TeddyCloud lesen“**: zeigt alle Tags in der bekannten Import-Vorschau (neu, bereits vorhanden, Konflikt, fehlerhaft). System-Tags werden ausgelassen. Erst „Übernehmen“ legt Einträge in Orbit an.
 - Jeder Eintrag erhält die Tag-UID im Orbit-Format, Modell, Serie, Titel und das Cover aus TeddyCloud. Schlüssel ist `tag:<RUID>`; ein Tag, den Orbit schon aus einer Flipper-Datei kennt, gilt als „bereits vorhanden“.
 - Der **Katalog** kommt aus TeddyCloud (`/api/toniesJson` und Custom-Tonies) statt von GitHub – auch ohne Internet.
+- **Sammlung → „Für TeddyCloud exportieren“** liest deine vorhandene `tonies.custom.json` und erstellt daraus eine ZIP-Datei mit ergänzten Einträgen und Coverbildern. Die Dateien kopierst du selbst in TeddyCloud; das Plugin schreibt nichts (TeddyClouds Schreibschnittstellen wie `toniesCustomJsonUpsert` bleiben gesperrt).
 
 ## Schutz und Grenzen
 

@@ -27,6 +27,7 @@ _Die Screenshots zeigen die Anwendung mit erfundenen Demodaten (Titel, Cover und
 - **Inhaltsmetadaten**, **Audio-ID**, **NFC-Tag-UID** und **physischer Träger bzw. Format** bleiben getrennte Angaben.
 - Einträge ergänzen, austauschen, prüfen und verschieben, ohne unbeteiligte Cover- oder Tag-Daten stillschweigend zu verändern.
 - Einträge aus einer `taggen-exchange`-Datei, aus TeddyStudio-Exporten oder – im TeddyCloud-Plugin – aus deinen TeddyCloud-Tags übernehmen. Erst nach deiner Bestätigung der Vorschau ändert sich etwas.
+- Eine Sammlung **für TeddyCloud exportieren**: eine ZIP-Datei mit `tonies.custom.json` und Coverbildern, damit deine eigenen Tags in TeddyCloud Titel und Bild bekommen.
 - Der Tag-Pass zeigt, was bekannt und zugeordnet ist und wo noch Angaben fehlen.
 
 ![Sammlungsansicht: Sammlungsauswahl, Welten-Filter, Druckstatus und Coverkarten](assets/screenshots/orbit-collection-tagpass.png)
@@ -62,7 +63,7 @@ Orbit kümmert sich um die physische Seite – Cover, Tags und Druckbögen. [Ted
 | Stufe | So funktioniert es | Was Orbit erhält |
 | --- | --- | --- |
 | 1 · Getrennt | Cover gestalten und Tag in Orbit dokumentieren, dann Inhalt und Bild in der TeddyCloud-Oberfläche zuweisen. | Nichts – keine Verbindung. |
-| 2 · Dateiaustausch | **Erstellen → „Aus TeddyStudio importieren“** liest eine [`taggen-exchange`](exchange/SCHEMA.md)-Datei oder die heutigen TeddyStudio-Exporte (Cover-Manifest, Sammlung, Bilder). | Titel, Serie, Cover, TeddyCloud-Modell, Audio-ID und Tag-UID – aus einer Datei, die du auswählst. |
+| 2 · Dateiaustausch | **Erstellen → „Aus TeddyStudio importieren“** liest eine [`taggen-exchange`](exchange/SCHEMA.md)-Datei oder die heutigen TeddyStudio-Exporte (Cover-Manifest, Sammlung, Bilder). | Titel, Serie, Cover, TeddyCloud-Modell, Audio-ID und Tag-UID – aus einer Datei, die du auswählst. In die andere Richtung: **Sammlung → „Für TeddyCloud exportieren“** erstellt eine `tonies.custom.json` mit Coverbildern, die du selbst in TeddyCloud kopierst. |
 | 3 · TeddyCloud-Plugin (Vorschau) | Orbit in den Plugin-Ordner von TeddyCloud legen und **Erstellen → „Tags aus TeddyCloud lesen“** wählen. | Deine Tags, Custom-Tonies und den Katalog – direkt aus deiner eigenen TeddyCloud gelesen. |
 
 Jeder Import beginnt mit einer Vorschau (neu, bereits vorhanden, Konflikt, fehlerhaft). Deine Bibliothek ändert sich erst, wenn du bestätigst.
@@ -139,6 +140,8 @@ Orbit nutzt oder fragt optional externe Community-Ressourcen ab. Diese werden vo
 - [TeddyCloud](https://github.com/toniebox-reverse-engineering/teddycloud) · Referenz für den Custom-Tag-Ablauf und der lesende Plugin-Modus
 - [TeddyStudio](https://github.com/DKT81/TeddyStudio) · Orbit liest dessen Cover-Manifest- und Sammlungsexporte
 - [QR Code Generator von Kazuhiko Arase](https://github.com/kazuhikoarase/qrcode-generator) · eingebettete QR-Implementierung (MIT)
+- [Color Thief von Lokesh Dhakar](https://github.com/lokesh/color-thief) · Farben aus dem Motiv im Cover-Studio (MIT, `vendor/`)
+- [smartcrop.js von Jonas Wagner](https://github.com/jwagner/smartcrop.js) · Ausschnitt-Vorschlag im Cover-Studio (MIT, `vendor/`)
 
 Einige externe Repositories weisen im Stammverzeichnis keine Lizenz aus. Öffentliche Verfügbarkeit bedeutet nicht automatisch, dass Daten, Bilder oder Dumps weiterverbreitet werden dürfen. Mehr dazu: [Quellen, Danksagung und Rechte](CREDITS_AND_RIGHTS.md).
 

@@ -1,5 +1,13 @@
 # TagGen Universe – Changelog
 
+## Universe 6.0 Preview · Export für TeddyCloud (tonies.custom.json)
+- Sammlung → „Für TeddyCloud exportieren“ erstellt eine ZIP-Datei mit `tonies.custom.json`, den Covern als PNG (`custom_img/orbit/`) und einer `LIESMICH.txt` mit Schritten und Modellliste. Eigene Tags bekommen damit in TeddyCloud Titel und Bild.
+- Eine vorhandene `tonies.custom.json` wird zusammengeführt: Fremde Einträge bleiben unverändert, neue Modelle heißen wie in TeddyCloud `custom-<n>` und werden hinter der höchsten Nummer vergeben. Beim erneuten Export behalten Orbit-Einträge ihr Modell und alles, was in TeddyCloud ergänzt wurde (Audio, Tracks, Sprache).
+- Audio-ID und Hash bleiben leer: Katalog-IDs echter Tonies würden in TeddyCloud deren Daten überschreiben.
+- Im TeddyCloud-Plugin wird die vorhandene Datei lesend von der TeddyCloud geholt. Orbit schreibt weiterhin nichts in TeddyCloud.
+- Neuer Regressionstest `tests/teddycloud-export.cjs` (ZIP mit Pythons `zipfile` geprüft).
+- Farben: Knöpfe, Auswahl und Akzente wieder im Tonie-Rot (`#da2355`) statt Violett, im dunklen Design ein helles Rot; Links wieder blau. `theme_color` im Manifest angepasst.
+
 ## Universe 6.0 Preview · Cover-Hilfen im Studio
 - „Farben aus Motiv“ übernimmt Akzent und Hintergrund aus dem Bild ([Color Thief](https://github.com/lokesh/color-thief), MIT). Der Hintergrund bleibt hell genug für den dunklen Titel (Kontrast ≥ 4,5:1), der Akzent hebt sich davon ab (≥ 3:1).
 - „Ausschnitt vorschlagen“ sucht den interessantesten Bildbereich ([smartcrop.js](https://github.com/jwagner/smartcrop.js), MIT) und setzt Motivgröße und Position – für runde und quadratische Cover.
