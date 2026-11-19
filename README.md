@@ -27,6 +27,7 @@ _The screenshots show the app's German interface with invented demo content (tit
 - Keep **content metadata**, **audio ID**, **NFC tag UID** and **physical carrier/format** as separate pieces of information.
 - Add, replace, check and move entries without silently changing unrelated cover or tag data.
 - Import entries from a `taggen-exchange` file, TeddyStudio exports or – in the TeddyCloud plugin – your TeddyCloud tags. Nothing changes until you confirm the preview.
+- **Export a collection for TeddyCloud**: a ZIP with a `tonies.custom.json` and cover images, so your custom tags get a title and a picture in TeddyCloud.
 - Use the Tag Pass to see what is known, what is linked and what still needs attention.
 
 ![Collection view: collection switcher, world filters, print status and a grid of cover cards](assets/screenshots/orbit-collection-tagpass.png)
@@ -62,7 +63,7 @@ Orbit takes care of the physical side – covers, tags and print sheets. [TeddyC
 | Step | How it works | What Orbit receives |
 | --- | --- | --- |
 | 1 · Separate | Prepare the cover and document the tag in Orbit, then assign content and image in TeddyCloud's own interface. | Nothing – no connection. |
-| 2 · File exchange | **Create → “Aus TeddyStudio importieren”** reads a [`taggen-exchange`](exchange/SCHEMA.md) file or today's TeddyStudio exports (cover manifest, collection, images). | Titles, series, covers, TeddyCloud model, audio ID and tag UID – from a file you choose. |
+| 2 · File exchange | **Create → “Aus TeddyStudio importieren”** reads a [`taggen-exchange`](exchange/SCHEMA.md) file or today's TeddyStudio exports (cover manifest, collection, images). | Titles, series, covers, TeddyCloud model, audio ID and tag UID – from a file you choose. The other way round: **Collection → “Für TeddyCloud exportieren”** creates a `tonies.custom.json` with cover images that you copy into TeddyCloud yourself. |
 | 3 · TeddyCloud plugin (preview) | Install Orbit in TeddyCloud's plugin folder and use **Create → “Tags aus TeddyCloud lesen”**. | Your tags, custom tonies and catalogue – read directly from your own TeddyCloud. |
 
 Every import starts with a preview (new, already present, conflict, faulty). Your library only changes when you confirm it.

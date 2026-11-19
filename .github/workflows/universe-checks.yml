@@ -39,6 +39,8 @@ jobs:
         run: node tests/teddycloud-plugin.cjs
       - name: Cover assist regression
         run: node tests/cover-assist.cjs
+      - name: TeddyCloud export regression
+        run: node tests/teddycloud-export.cjs
       - name: Universe desktop and mobile journeys
         run: node universe-browser-test.cjs
       - name: Screenshots

@@ -14,7 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 FOLDER = "taggen-orbit"
-FILES = ["index.html", "universe.js", "universe.css", "exchange.js", "teddycloud.js", "cover-assist.js", "vendor/color-thief.js", "vendor/smartcrop.js", "sw.js",
+FILES = ["index.html", "universe.js", "universe.css", "exchange.js", "teddycloud.js", "cover-assist.js", "teddycloud-export.js", "vendor/color-thief.js", "vendor/smartcrop.js", "sw.js",
          "manifest.webmanifest", "orbit-logo.svg", "assets/orbit-icon-192.png", "assets/orbit-icon-512.png",
          "CREDITS_AND_RIGHTS.md"]
 
