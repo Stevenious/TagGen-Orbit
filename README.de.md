@@ -40,7 +40,7 @@ _Die Screenshots zeigen die Anwendung mit erfundenen Demodaten (Titel, Cover und
   - Münzkapsel · 43 mm · 12 Plätze
   - Avery 6223-10 · 30 mm · 48 Plätze
   - Avery L3415-10 · 40 mm · 24 Plätze
-  - Freie runde Formate: 25 mm, 30 mm und 40 mm
+  - Freie runde Formate: 25 mm, 30 mm, 38 mm (Tag-Gehäuse), 40 mm und 50 mm (Figurensockel)
 - Optionale Rückseiten können QR-Informationen und Tag-Angaben enthalten.
 - Druckerkalibrierung und Duplex-Einstellungen sind – soweit unterstützt – vorhanden.
 
