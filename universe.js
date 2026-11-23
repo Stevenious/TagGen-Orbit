@@ -7,7 +7,8 @@ const worlds=['Geschichten','Musik','Einschlafen','Unterwegs','Eigene Kreationen
 const physicalFormats=[
  ['round40','Münzkapsel · Rund 40 mm'],['round30','Münzkapsel · Rund 30 mm'],
  ['square43','Quadratkapsel · 43 × 43 mm'],['capsule43','Münzkapsel · Rund 43 mm'],
- ['round25','Freies Format · Rund 25 mm']
+ ['round25','Freies Format · Rund 25 mm'],
+ ['round38','Tag-Gehäuse · Rund 38 mm'],['round50','Figurensockel · Rund 50 mm']
 ];
 const view={world:'',passportId:null,batch:[],batchBusy:false,editorFormatChanged:false,batchGeneration:0,cardGeneration:0};
 const node=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};

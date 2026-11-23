@@ -40,7 +40,7 @@ _The screenshots show the app's German interface with invented demo content (tit
   - 43 mm coin capsule · 12 positions
   - Avery 6223-10 · 30 mm · 48 positions
   - Avery L3415-10 · 40 mm · 24 positions
-  - Free round formats: 25 mm, 30 mm and 40 mm
+  - Free round formats: 25 mm, 30 mm, 38 mm (tag cases), 40 mm and 50 mm (figure bases)
 - Optional reverse sides support QR information and tag details.
 - Printer calibration and duplex settings are available where supported.
 

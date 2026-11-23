@@ -1,5 +1,11 @@
 # TagGen Universe – Changelog
 
+## Universe 6.0 Preview · Formate 38 mm und 50 mm
+- Neues freies A4-Raster **Ø38 mm · 24 Plätze** (4 × 6) für 38-mm-Klebetags und 3D-gedruckte Tag-Gehäuse.
+- Neues freies A4-Raster **Ø50 mm · 15 Plätze** (3 × 5) für 50-mm-Figurensockel.
+- Beide Raster sind mittig auf A4 und mit mindestens 13,5 mm Rand angelegt. Sie stehen im Druck-Studio, als Stapelformat und als Träger im Cover-Editor zur Wahl.
+- Zum Ausschneiden gedacht; ein physischer Kontrollausdruck steht noch aus.
+
 ## Universe 6.0 Preview · Export für TeddyCloud (tonies.custom.json)
 - Sammlung → „Für TeddyCloud exportieren“ erstellt eine ZIP-Datei mit `tonies.custom.json`, den Covern als PNG (`custom_img/orbit/`) und einer `LIESMICH.txt` mit Schritten und Modellliste. Eigene Tags bekommen damit in TeddyCloud Titel und Bild.
 - Eine vorhandene `tonies.custom.json` wird zusammengeführt: Fremde Einträge bleiben unverändert, neue Modelle heißen wie in TeddyCloud `custom-<n>` und werden hinter der höchsten Nummer vergeben. Beim erneuten Export behalten Orbit-Einträge ihr Modell und alles, was in TeddyCloud ergänzt wurde (Audio, Tracks, Sprache).
