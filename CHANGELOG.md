@@ -1,5 +1,11 @@
 # TagGen Universe – Changelog
 
+## Universe 6.0 Preview · UX-Feinschliff
+- Hellmodus: aktive Reiter, Filter, Schrittanzeige und Zähler in dunklerem Rosa (Kontrast 5,3 : 1 statt 4,4 : 1). Der Dark Mode bleibt unverändert.
+- Zähler an „Sammlung“ und „Drucken“ werden bei 0 ausgeblendet.
+- Kein überzähliger Strich mehr über dem •••-Menü.
+- Auf Touch-Geräten sind Knöpfe, Auswahlfelder und Aufklapper mindestens 44 px hoch.
+
 ## Universe 6.0 Preview · Formate 38 mm und 50 mm
 - Neues freies A4-Raster **Ø38 mm · 24 Plätze** (4 × 6) für 38-mm-Klebetags und 3D-gedruckte Tag-Gehäuse.
 - Neues freies A4-Raster **Ø50 mm · 15 Plätze** (3 × 5) für 50-mm-Figurensockel.
