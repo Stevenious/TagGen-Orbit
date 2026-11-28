@@ -120,3 +120,11 @@ body[data-mobile-step=editor] .settings-panel .controls{display:flex;flex-direct
 .cover-assist .row{display:flex;flex-wrap:wrap;gap:8px}
 .cover-assist [data-ready="false"]{opacity:.55}
 .cover-assist small{color:var(--muted)}
+
+/* UX-Feinschliff (UI UX Pro Max Audit) */
+:root{--rose-ink:#c41d4b}
+@media(prefers-color-scheme:dark){:root{--rose-ink:var(--rose)}}
+.universe-more{border-top:0;padding-top:0}
+.main-nav button[aria-current=page],.badge,.library-tabs button[aria-pressed=true],.mobile-steps button[aria-pressed=true],.universe-filter button[aria-pressed=true],.bridge-status span.linked{color:var(--rose-ink)}
+.badge[hidden]{display:none!important}
+@media(pointer:coarse){button:not(.slot),summary,select{min-height:44px}}
